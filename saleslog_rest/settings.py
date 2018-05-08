@@ -43,6 +43,7 @@ INSTALLED_APPS = (
 
     'accounts',
     'lib',
+    'core_api',
 )
 
 MIDDLEWARE_CLASSES = (
