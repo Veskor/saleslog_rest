@@ -15,19 +15,19 @@ from lib.utils import AtomicMixin
 
 # Create your views here.
 class CustomerViewset(viewsets.ModelViewSet):
-    authentication_classes = (TokenAuthentication,)
-    permission_classes = (IsAuthenticated,)
+#    authentication_classes = (TokenAuthentication,)
+#    permission_classes = (IsAuthenticated,)
     serializer_class = CustomerSerializer
     queryset = serializer_class.Meta.model.objects.all()
 
 class RepairNetworkViewset(viewsets.ModelViewSet):
-    authentication_classes = (TokenAuthentication,)
-    permission_classes = (IsAuthenticated,)
+#    authentication_classes = (TokenAuthentication,)
+#    permission_classes = (IsAuthenticated,)
     serializer_class = RepairNetworkSerializer
     queryset = serializer_class.Meta.model.objects.all()
 
 class SupportViewset(viewsets.ModelViewSet):
-    authentication_classes = (TokenAuthentication,)
-    permission_classes = (IsAuthenticated,)
+#    authentication_classes = (TokenAuthentication,)
+#    permission_classes = (IsAuthenticated,)
     serializer_class = SupportSerializer
     queryset = serializer_class.Meta.model.objects.all()
