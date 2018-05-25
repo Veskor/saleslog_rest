@@ -20,3 +20,6 @@ class SupportViewset(viewsets.ModelViewSet):
         return Response({'support': support.data,
                          'tickets': tickets.data,
                          })
+
+    def create(self,request):
+        pass

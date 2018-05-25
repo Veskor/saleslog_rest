@@ -29,9 +29,6 @@ class EngineerSerializer(serializers.ModelSerializer):
 
 class RepairSerializer(serializers.ModelSerializer):
 
-    part = PartSerializer()
-    equipment = EquipmentSerializer()
-    engineer = EngineerSerializer()
     status = StatusSerializer()
 
     class Meta:
