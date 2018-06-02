@@ -12,6 +12,6 @@ class TicketViewset(viewsets.ModelViewSet):
     serializer_class = TicketSerializer
     queryset = serializer_class.Meta.model.objects.all()
 
-    def create(self,request):
-        print(request.POST[''])
-        return Response({'vex':'car'})
+#    def create(self,request):
+#        print(request.POST[''])
+#        return Response({'vex':'car'})

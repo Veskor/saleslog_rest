@@ -68,7 +68,7 @@ class Repair(models.Model):
 class Ticket(models.Model):
     tag = models.ForeignKey(Chain)
     info = models.TextField()
-    repair = models.ForeignKey(Repair)
+    repair = models.ForeignKey(Repair,blank=True,null=True)
     support = models.ForeignKey(Support,default='')
 #    status = models.ForeignKey(Status)
 

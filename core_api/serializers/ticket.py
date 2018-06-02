@@ -6,7 +6,7 @@ from .repair import RepairSerializer
 class TicketSerializer(serializers.ModelSerializer):
 
     info = serializers.JSONField()
-    repair = RepairSerializer()
+#    repair = RepairSerializer()
 
     class Meta:
         model = Ticket

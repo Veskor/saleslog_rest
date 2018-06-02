@@ -3,9 +3,7 @@ from rest_framework import serializers
 
 class ChainSerializer(serializers.ModelSerializer):
 
-    tickets = serializers.ListField(
-        child=serializers.CharField()
-        )
+    tickets = serializers.JSONField()
 
     class Meta:
         model = Chain
