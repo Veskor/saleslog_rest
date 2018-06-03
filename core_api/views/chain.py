@@ -1,6 +1,6 @@
 from rest_framework import viewsets
 
-from ..serializers.chain import ChainSerializer
+from ..serializers.chain import ChainSerializer, StatusSerializer
 from ..serializers.customer import CustomerSerializer
 from ..serializers.ticket import TicketSerializer
 
@@ -29,3 +29,7 @@ class ChainViewset(viewsets.ModelViewSet):
         return Response({'customer': customer.data,
                         'tickets': tickets.data,
                         })
+
+class StatusViewSet(viewsets.ModelViewSet):
+    serializer_class = StatusSerializer
+    queryset = serializer_class.Meta.model.objects.all()

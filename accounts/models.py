@@ -51,6 +51,20 @@ class MyUserManager(BaseUserManager):
 
         return self._create_user(email, password, first_name, last_name, is_staff=False, is_superuser=False,
                                  **extra_fields)
+    def create_admin(self, email, first_name, last_name, password, is_staff=True, **extra_fields):
+        """
+        Create a admin user.
+
+        :param email: string
+        :param first_name: string
+        :param last_name: string
+        :param password: string
+        :param extra_fields:
+        :return: User
+        """
+        return self._create_user(email, password, first_name, last_name, is_staff, is_superuser=False,
+                         **extra_fields)
+
 
     def create_superuser(self, email, first_name='', last_name='', password=None, **extra_fields):
         """

@@ -20,9 +20,11 @@ class Customer(models.Model):
     payment_done = models.BooleanField(default=True)
     #payment = models.ForeignKey(Payment,null=True,blank=True)
 
+
 class Chain(models.Model):
     tickets = models.TextField(null=True)
     customer = models.ForeignKey(Customer)
+    statuses = models.TextField(null=True)
 #    service_plan = models.ForgeinKey('Payment')
 
     def __str__(self):
@@ -52,7 +54,8 @@ class Engineer(models.Model):
 
 class Status(models.Model):
     name = models.CharField(max_length=32)
-
+    color = models.CharField(max_length=6,default='')
+    chain = models.ForeignKey(Chain,default='')
     def __str__(self):
         return self.name
 
@@ -60,7 +63,6 @@ class Repair(models.Model):
     part = models.ForeignKey(Part) # 1 > ??? Parts.
     equipment = models.ForeignKey(Equipment)
     engineer = models.ForeignKey(Engineer)
-    status = models.ForeignKey(Status)
 
     def __str__(self):
         return self.status
@@ -70,7 +72,7 @@ class Ticket(models.Model):
     info = models.TextField()
     repair = models.ForeignKey(Repair,blank=True,null=True)
     support = models.ForeignKey(Support,default='')
-#    status = models.ForeignKey(Status)
+    status = models.ForeignKey(Status)
 
 #class Payment(models.Model):
 #    service_plan = models.CharField(max_length=32,null=True,blank=True)
