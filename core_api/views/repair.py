@@ -28,6 +28,27 @@ class RepairNetworkViewset(viewsets.ModelViewSet):
                 })
         return Response(response)
 
+    def create(self, request, *args, **kwargs):
+        print(request.data)
+        obj = RepairNetworkSerializer(data=request.data)
+
+        obj.is_valid()
+        obj = obj.save()
+
+        pk = obj.id
+
+        parts = Part.objects.filter(network=pk)
+        equipment = Equipment.objects.filter(network=pk)
+        engineers = Engineer.objects.filter(network=pk)
+        response = {
+            'id': obj.id,
+            'name': obj.name,
+            'engineers': EngineerSerializer(engineers,many=True).data,
+            'parts': PartSerializer(parts,many=True).data,
+            'equipment': EquipmentSerializer(equipment,many=True).data
+            }
+
+        return Response(response)
 # ovo mogu da vide inzinjeri i customeri i komentarisu. kao i support koji
 # i svi admini iz suppporta za ovaj ticker.
 
