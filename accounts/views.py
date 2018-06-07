@@ -25,8 +25,8 @@ class UserRegisterView(AtomicMixin, CreateModelMixin, GenericAPIView):
 
 class UserLoginView(GenericAPIView):
     serializer_class = UserSerializer
-    authentication_classes = (BasicAuthentication,)
-    permission_classes = (IsAuthenticated,)
+#    authentication_classes = (BasicAuthentication,)
+#    permission_classes = (IsAuthenticated,)
 
     def post(self, request):
         """User login with username and password."""

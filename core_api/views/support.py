@@ -10,6 +10,7 @@ class SupportViewset(viewsets.ModelViewSet):
     serializer_class = SupportSerializer
     queryset = serializer_class.Meta.model.objects.all()
 
+
     def retrieve(self,request,pk=None):
 
         tickets = Ticket.objects.filter(support=pk)
@@ -20,6 +21,3 @@ class SupportViewset(viewsets.ModelViewSet):
         return Response({'support': support.data,
                          'tickets': tickets.data,
                          })
-
-    def create(self,request):
-        pass

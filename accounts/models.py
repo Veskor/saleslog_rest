@@ -7,6 +7,16 @@ from django.db import models
 from django.utils import timezone
 from django.utils.translation import ugettext_lazy as _
 
+SALES = 'Sales account'
+ADMIN = 'Admin account'
+MANAGER = 'Manager account'
+SUPER_ADMIN = 'Super user account'
+USER_TYPES = (
+    (SALES,'Sales'),
+    (ADMIN, 'Admin'),
+    (MANAGER,'Manager'),
+    (SUPER_ADMIN, 'Super')
+)
 
 class MyUserManager(BaseUserManager):
     def _create_user(self, email, password, first_name, last_name, is_staff, is_superuser, **extra_fields):
@@ -49,9 +59,9 @@ class MyUserManager(BaseUserManager):
         :return: User
         """
 
-        return self._create_user(email, password, first_name, last_name, is_staff=False, is_superuser=False,
+        return self._create_user(email, password, first_name, last_name, is_staff=False, is_superuser=False, user_type=SALES,
                                  **extra_fields)
-    def create_admin(self, email, first_name, last_name, password, is_staff=True, **extra_fields):
+    def create_admin(self, email, first_name, last_name, password, **extra_fields):
         """
         Create a admin user.
 
@@ -62,7 +72,21 @@ class MyUserManager(BaseUserManager):
         :param extra_fields:
         :return: User
         """
-        return self._create_user(email, password, first_name, last_name, is_staff, is_superuser=False,
+        return self._create_user(email, password, first_name, last_name, is_staff, is_superuser=False, user_type=ADMIN,
+                         **extra_fields)
+
+    def create_manager(self, email, first_name, last_name, password, **extra_fields):
+        """
+        Create a admin user.
+
+        :param email: string
+        :param first_name: string
+        :param last_name: string
+        :param password: string
+        :param extra_fields:
+        :return: User
+        """
+        return self._create_user(email, password, first_name, last_name, is_staff, is_superuser=False, user_type=MANAGER,
                          **extra_fields)
 
 
@@ -77,7 +101,7 @@ class MyUserManager(BaseUserManager):
         :param extra_fields:
         :return: User
         """
-        return self._create_user(email, password, first_name, last_name, is_staff=True, is_superuser=True,
+        return self._create_user(email, password, first_name, last_name, is_staff=True, is_superuser=True, user_type=SUPER_ADMIN,
                                  **extra_fields)
 
 
@@ -109,6 +133,8 @@ class User(AbstractBaseUser):
     is_staff = models.BooleanField(_('staff status'), default=False)
     is_superuser = models.BooleanField(_('superuser status'), default=False)
     is_active = models.BooleanField(_('active'), default=True)
+    user_type = models.CharField(_('user type'),choices=USER_TYPES, default=SALES, max_length=32)
+
 
     date_joined = models.DateTimeField(_('date joined'), auto_now_add=True)
     date_updated = models.DateTimeField(_('date updated'), auto_now=True)

@@ -29,7 +29,6 @@ class RepairNetworkViewset(viewsets.ModelViewSet):
         return Response(response)
 
     def create(self, request, *args, **kwargs):
-        print(request.data)
         obj = RepairNetworkSerializer(data=request.data)
 
         obj.is_valid()

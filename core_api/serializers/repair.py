@@ -6,7 +6,7 @@ class RepairNetworkSerializer(serializers.ModelSerializer):
     class Meta:
         model = RepairNetwork
         fields = ('id','name')
-
+    
 class StatusSerializer(serializers.ModelSerializer):
     class Meta:
         model = Status
