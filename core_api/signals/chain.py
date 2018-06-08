@@ -2,7 +2,7 @@ from django.db.models.signals import post_save, post_delete
 from django.dispatch import receiver
 import json
 
-from ..serializers.chain import ChainSerializer
+from ..serializers.chain import ChainSerializer, ChatSerializer
 
 from ..models import *
 
@@ -10,17 +10,33 @@ from ..models import *
 # ---
 @receiver(post_save, sender=Customer, dispatch_uid='create_chain')
 def create_chain(sender, instance, **kwargs):
+
+    # Chain
     data = {'customer': instance.id, 'tickets':[]}
 
     chain = ChainSerializer(data=data)
     chain.is_valid()
 
     saved = chain.save()
+    # Chat
+    data = {'origin':'Master','tag':saved.id}
+    chat = ChatSerializer(data=data)
+    chat.is_valid()
+
+    chat.save()
 
 @receiver(post_save, sender=Customer, dispatch_uid='create_chain')
 def delete_chain(sender, instance, **kwargs):
 
     chain = Chain.objects.filter(customer=instance.id)[0]
+
+    # Warning !!! when deleting customer chat/messages will be left behind and maybe will cause junk in system.
+    # uncomment if we should start deleting them.
+    #chat = Chat.objects.filter(tag=chain.id)
+    #messages = Message.objects.filter(chat=chat.id)
+    #for item in messages:
+    #    item.delete()
+    #chat.delete
 
     deleted = chain.delete()
 # ---
