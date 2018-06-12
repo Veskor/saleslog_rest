@@ -12,13 +12,13 @@ from ..models import *
 def create_chain(sender, instance, **kwargs):
 
     # Chain
-    data = {'customer': instance.id, 'tickets':[]}
+    data = {'customer': instance.id, 'tickets':'[]','chats':'[]','statuses':'[]'}
 
     chain = ChainSerializer(data=data)
     chain.is_valid()
-
     saved = chain.save()
     # Chat
+
     data = {'origin':'Master','tag':saved.id}
     chat = ChatSerializer(data=data)
     chat.is_valid()
@@ -32,6 +32,7 @@ def delete_chain(sender, instance, **kwargs):
 
     # Warning !!! when deleting customer chat/messages will be left behind and maybe will cause junk in system.
     # uncomment if we should start deleting them.
+
     #chat = Chat.objects.filter(tag=chain.id)
     #messages = Message.objects.filter(chat=chat.id)
     #for item in messages:
