@@ -8,35 +8,37 @@ from django.contrib.contenttypes.models import ContentType
 
 @receiver(post_save, sender=Support, dispatch_uid='create_support_role')
 def create_role(sender, instance, **kwargs):
-    return
     # Tickets
     ticket_ct = ContentType.objects.get(model='ticket')
+    name = instance.name
 
-
-    can_edit_tickets = Permission(name='Can Edit', codename='can_edit_tickets',
+    can_edit_tickets, created = Permission.objects.get_or_create(name='Can Edit {}'.format(name), codename='can_edit_tickets_{}'.format(name),
                        content_type=ticket_ct)
 
-    can_view_tickets = Permission(name='Can View', codename='can_view_tickets',
+    if created == True:
+        can_edit_tickets.save()
+
+    can_view_tickets, created = Permission.objects.get_or_create(name='Can View {}'.format(name), codename='can_view_tickets_{}'.format(name),
                        content_type=ticket_ct)
-
-    can_edit_tickets.save()
-    can_view_tickets.save()
-
+    if created == True:
+        can_view_tickets.save()
 
     # Customers
     customer_ct = ContentType.objects.get(model='customer')
 
-    can_edit_tickets = Permission.objects.create(name='Can Edit', codename='can_edit_customers',
+    can_edit_customers, created = Permission.objects.get_or_create(name='Can Edit {}'.format(name), codename='can_edit_customers_{}'.format(name),
                        content_type=customer_ct)
+    if created == True:
+        can_edit_customers.save()
 
-    can_view_tickets = Permission.objects.create(name='Can View', codename='can_view_customers',
+    can_view_customers, created = Permission.objects.get_or_create(name='Can View {}'.format(name), codename='can_view_customers_{}'.format(name),
                        content_type=customer_ct)
+    if created == True:
+        can_edit_customers.save()
 
-    can_edit_tickets.save()
-    can_view_tickets.save()
+    group, created = Group.objects.get_or_create(name=instance.name)
 
-    created = Group.objects.create(name=instance.name)
+    if created == True:
+        group.save()
 
-    created.save()
-
-    created.permissions = [can_edit_tickets,can_view_tickets,can_edit_customers,can_view_customers]
+    group.permissions = [can_edit_tickets,can_view_tickets,can_edit_customers,can_view_customers]

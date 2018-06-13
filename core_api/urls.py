@@ -1,6 +1,6 @@
 from django.conf.urls import url, include
 from rest_framework.routers import DefaultRouter
-from .views.support import SupportViewset
+from .views.support import SupportViewset, UserSupportViewset
 from .views.repair import RepairNetworkViewset
 from .views.customer import CustomerViewset
 from .views.chain import ChainViewset, StatusViewSet, ChatsViewSet, MessageViewSet
@@ -16,7 +16,7 @@ router.register(r'ticket', TicketViewset)
 router.register(r'chat', ChatsViewSet)
 router.register(r'tags', StatusViewSet)
 router.register(r'message', MessageViewSet)
-
+router.register(r'add',UserSupportViewset)
 
 urlpatterns = [
     url(

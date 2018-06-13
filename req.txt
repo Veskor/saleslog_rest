@@ -1,24 +1,21 @@
-Django==1.11.4
-django-extensions==1.8.1
-
+asn1crypto==0.24.0
+block-disposable-email==1.0.1
+cffi==1.11.5
+contextlib2==0.5.5
+cryptography==2.2.2
+Django==1.10
 django-disposable-email-checker==1.2.1
-
-# PostgresSQL
-psycopg2==2.7.3
-
-# serve files
-whitenoise==3.3.0
-
-# Rest Framework
-djangorestframework==3.6.4
-
-# Sentry
-raven==6.1.0
-
-# for date processing
-python-dateutil==2.6.1
-
-# Logging
-git+https://github.com/Seedstars/django-rest-logger.git
-
+django-extensions==1.8.1
 django-rest-knox==3.0.3
+djangorestframework==3.6.4
+djangorestframework-jwt==1.11.0
+idna==2.6
+psycopg2==2.7.3
+pycparser==2.18
+PyJWT==1.6.4
+pyOpenSSL==17.5.0
+python-dateutil==2.6.1
+pytz==2018.4
+raven==6.1.0
+six==1.10.0
+whitenoise==3.3.0
