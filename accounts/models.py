@@ -6,6 +6,7 @@ from django.contrib.auth.models import AbstractBaseUser, BaseUserManager
 from django.db import models
 from django.utils import timezone
 from django.utils.translation import ugettext_lazy as _
+from django.contrib.auth.models import PermissionsMixin
 
 SALES = 'Sales account'
 ADMIN = 'Admin account'
@@ -22,7 +23,6 @@ class MyUserManager(BaseUserManager):
     def _create_user(self, email, password, first_name, last_name, is_staff, is_superuser, **extra_fields):
         """
         Create and save an User with the given email, password, name and phone number.
-
         :param email: string
         :param password: string
         :param first_name: string
@@ -50,7 +50,6 @@ class MyUserManager(BaseUserManager):
     def create_user(self, email, first_name, last_name, password, **extra_fields):
         """
         Create and save an User with the given email, password and name.
-
         :param email: string
         :param first_name: string
         :param last_name: string
@@ -64,7 +63,6 @@ class MyUserManager(BaseUserManager):
     def create_admin(self, email, first_name, last_name, password, **extra_fields):
         """
         Create a admin user.
-
         :param email: string
         :param first_name: string
         :param last_name: string
@@ -72,13 +70,12 @@ class MyUserManager(BaseUserManager):
         :param extra_fields:
         :return: User
         """
-        return self._create_user(email, password, first_name, last_name, is_staff, is_superuser=False, user_type=ADMIN,
+        return self._create_user(email, password, first_name, last_name, is_staff=False, is_superuser=False, user_type=ADMIN,
                          **extra_fields)
 
     def create_manager(self, email, first_name, last_name, password, **extra_fields):
         """
         Create a admin user.
-
         :param email: string
         :param first_name: string
         :param last_name: string
@@ -86,14 +83,13 @@ class MyUserManager(BaseUserManager):
         :param extra_fields:
         :return: User
         """
-        return self._create_user(email, password, first_name, last_name, is_staff, is_superuser=False, user_type=MANAGER,
+        return self._create_user(email, password, first_name, last_name, is_staff=True, is_superuser=False, user_type=MANAGER,
                          **extra_fields)
 
 
     def create_superuser(self, email, first_name='', last_name='', password=None, **extra_fields):
         """
         Create a super user.
-
         :param email: string
         :param first_name: string
         :param last_name: string
@@ -104,8 +100,7 @@ class MyUserManager(BaseUserManager):
         return self._create_user(email, password, first_name, last_name, is_staff=True, is_superuser=True, user_type=SUPER_ADMIN,
                                  **extra_fields)
 
-
-class User(AbstractBaseUser):
+class User(AbstractBaseUser,PermissionsMixin):
     """
     Model that represents an user.
 
@@ -125,6 +120,7 @@ class User(AbstractBaseUser):
     first_name = models.CharField(_('First Name'), max_length=50)
     last_name = models.CharField(_('Last Name'), max_length=50)
     email = models.EmailField(_('Email address'), unique=True)
+    username = models.CharField(_('First Name'), max_length=50)
 
     gender = models.CharField(max_length=1, choices=GENDER_CHOICES, default=GENDER_MALE)
 
@@ -168,23 +164,3 @@ class User(AbstractBaseUser):
         :return: string
         """
         return self.first_name
-
-    def activation_expired(self):
-        """
-        Check if user's activation has expired.
-
-        :return: boolean
-        """
-        return self.date_joined + timedelta(days=settings.ACCOUNT_ACTIVATION_DAYS) < timezone.now()
-
-    def confirm_email(self):
-        """
-        Confirm email.
-
-        :return: boolean
-        """
-        if not self.activation_expired() and not self.confirmed_email:
-            self.confirmed_email = True
-            self.save()
-            return True
-        return False

@@ -8,6 +8,7 @@ from .views.ticket import TicketViewset
 
 router = DefaultRouter()
 network_detail = RepairNetworkViewset.as_view({'get': 'retrieve'})
+
 router.register(r'support', SupportViewset)
 router.register(r'network', RepairNetworkViewset)
 router.register(r'customer', CustomerViewset)
@@ -19,6 +20,7 @@ router.register(r'message', MessageViewSet)
 router.register(r'add',UserSupportViewset)
 
 urlpatterns = [
+    url(r'accounts/', include('accounts.urls', namespace='accounts')),
     url(
             r'',
                 include(

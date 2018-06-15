@@ -17,3 +17,4 @@ class AddUserSerializer(serializers.Serializer):
     user_id = serializers.IntegerField()
     class Meta:
         fields = ('user_id')
+# izlistaj usere u svakom support view !

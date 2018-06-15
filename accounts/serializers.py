@@ -23,6 +23,7 @@ class UserRegistrationSerializer(serializers.ModelSerializer):
 
         :param validated_data: string
         """
+        print(validated_data)
         user = User.objects.create(**validated_data)
         user.set_password(validated_data['password'])
         user.save()

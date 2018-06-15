@@ -1,67 +1,124 @@
 from django.shortcuts import get_object_or_404
-from django_rest_logger import log
-from knox.auth import TokenAuthentication
-from knox.models import AuthToken
-from rest_framework import status
-from rest_framework.authentication import BasicAuthentication
-from rest_framework.generics import GenericAPIView
-from rest_framework.mixins import CreateModelMixin
+from rest_framework import status, viewsets
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
+from rest_framework.decorators import detail_route
 
-from accounts.models import User
+
+from accounts.models import User, USER_TYPES, SALES, \
+                            ADMIN, MANAGER, SUPER_ADMIN
 from accounts.serializers import UserRegistrationSerializer, UserSerializer
 from lib.utils import AtomicMixin
 
+# create every type of user
+# login with jwt (obtain jwt)
 
-class UserRegisterView(AtomicMixin, CreateModelMixin, GenericAPIView):
-    serializer_class = UserRegistrationSerializer
-    authentication_classes = ()
+from rest_framework import serializers
 
-    def post(self, request):
-        """User registration view."""
-        return self.create(request)
+class CreateSerializer(serializers.Serializer):
+    email = serializers.EmailField()
+    first_name = serializers.CharField()
+    last_name = serializers.CharField()
+    username = serializers.CharField()
+    gender = serializers.ChoiceField(choices=User.GENDER_CHOICES)
+    user_type = serializers.ChoiceField(choices=USER_TYPES)
 
+    class Meta:
+        model = User
+        fields = ('email','first_name','last_name','username','gender','user_type')
 
-class UserLoginView(GenericAPIView):
-    serializer_class = UserSerializer
-#    authentication_classes = (BasicAuthentication,)
-#    permission_classes = (IsAuthenticated,)
+    def create(self, data):
+        if(data['user_type'] == SALES):
+            user = User.objects.create_user(email=data['email'],
+                                            first_name=data['first_name'],
+                                            last_name=data['last_name'],
+                                            username=data['username'],
+                                            gender=data['gender'],
+                                            password='')
+            saved = user.save()
 
-    def post(self, request):
-        """User login with username and password."""
-        token = AuthToken.objects.create(request.user)
-        return Response({
-            'user': self.get_serializer(request.user).data,
-            'token': token
-        })
+        elif(data['user_type'] == ADMIN):
+            user = User.objects.create_admin(email=data['email'],
+                                            first_name=data['first_name'],
+                                            last_name=data['last_name'],
+                                            username=data['username'],
+                                            gender=data['gender'],
+                                            password='')
 
+            saved = user.save()
 
-class UserConfirmEmailView(AtomicMixin, GenericAPIView):
-    serializer_class = None
-    authentication_classes = ()
+        elif(data['user_type'] == MANAGER):
+            print('hey')
+            user = User.objects.create_manager(email=data['email'],
+                                            first_name=data['first_name'],
+                                            last_name=data['last_name'],
+                                            username=data['username'],
+                                            gender=data['gender'],
+                                            password='')
 
-    def get(self, request, activation_key):
-        """
-        View for confirm email.
+            saved = user.save()
 
-        Receive an activation key as parameter and confirm email.
-        """
-        user = get_object_or_404(User, activation_key=str(activation_key))
-        if user.confirm_email():
-            return Response(status=status.HTTP_200_OK)
+        elif(data['user_type'] == SUPER_ADMIN):
 
-        log.warning(message='Email confirmation key not found.',
-                    details={'http_status_code': status.HTTP_404_NOT_FOUND})
-        return Response(status=status.HTTP_404_NOT_FOUND)
+            user = User.objects.create_superuser(email=data['email'],
+                                            first_name=data['first_name'],
+                                            last_name=data['last_name'],
+                                            username=data['username'],
+                                            gender=data['gender'],
+                                            password='vexadija')
+            saved = user.save()
 
+        # send email with activation_key
+        print(user.username)
+        return data
 
-class UserEmailConfirmationStatusView(GenericAPIView):
-    serializer_class = None
-    authentication_classes = (TokenAuthentication,)
-    permission_classes = (IsAuthenticated,)
+class PasswordSerializer(serializers.Serializer):
+    password1 = serializers.CharField(
+        style={'input_type': 'password'}
+    )
 
-    def get(self, request):
-        """Retrieve user current confirmed_email status."""
-        user = self.request.user
-        return Response({'status': user.confirmed_email}, status=status.HTTP_200_OK)
+    password2 = serializers.CharField(
+    style={'input_type': 'password'}
+    )
+    class Meta:
+        model = User
+        fields = ('password1','password2')
+
+    def validate(self,data):
+        print(data['password2'])
+        if data['password1'] == data['password2']:
+            # set password
+            pass
+        else:
+            return False
+
+class UserCreationView(viewsets.ViewSet):
+    serializer_class = CreateSerializer
+    queryset = serializer_class.Meta.model.objects.all()
+
+    def list(self,request):
+        users = User.objects.all()
+        users = self.serializer_class(users,many=True)
+        return Response({"users":users.data})
+
+    def create(self,request):
+
+        data = self.serializer_class(data=request.data)
+        data.is_valid()
+
+        data.save()
+
+        user_created = data.data
+
+        return Response({'user':user_created})
+
+class ConfrmUser(viewsets.ViewSet):
+    serializer_class = PasswordSerializer
+    @detail_route(methods=['post'])
+    def SetPassword(self, request, pk=None):
+        data = self.serializer_class(data=request.data)
+        return Response({'error': data.is_valid()})
+
+class Login():
+    def obtain_token():
+        pass
