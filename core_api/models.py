@@ -8,6 +8,7 @@ class RepairNetwork(models.Model):
 
 class Support(models.Model):
     name = models.CharField(max_length=32)
+    ip = models.GenericIPAddressField(protocol='IPv4')
     network = models.ForeignKey(RepairNetwork,on_delete=models.CASCADE)
     fields = models.TextField(default='')
 

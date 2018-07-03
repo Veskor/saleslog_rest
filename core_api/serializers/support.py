@@ -4,17 +4,20 @@ from django.contrib.auth.models import User
 
 class SupportSerializer(serializers.ModelSerializer):
     fields = serializers.JSONField()
+    ip = serializers.IPAddressField()
     class Meta:
         model = Support
-        fields = ('id','name','network','fields')
+        fields = ('id','name','network','fields','ip')
 
-class UserSerializer(serializers.ModelSerializer):
+class UserSerializer(serializers.Serializer):
+    id = serializers.IntegerField()
+    username = serializers.CharField()
+    email = serializers.EmailField()
     class Meta:
         model = User
-        fields = ('id','first_name','last_name','username')
+        fields = ('id','email','username')
 
 class AddUserSerializer(serializers.Serializer):
     user_id = serializers.IntegerField()
     class Meta:
         fields = ('user_id')
-# izlistaj usere u svakom support view !

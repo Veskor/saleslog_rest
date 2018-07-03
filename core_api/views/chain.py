@@ -5,7 +5,7 @@ from ..serializers.chain import ChainSerializer, StatusSerializer, ChatSerialize
 from ..serializers.customer import CustomerSerializer
 from ..serializers.ticket import TicketSerializer
 
-from ..models import Customer, Ticket, Status
+from ..models import Customer, Ticket, Status, Chat
 
 import json
 
@@ -14,33 +14,35 @@ class ChainViewset(viewsets.ModelViewSet):
     queryset = serializer_class.Meta.model.objects.all()
 
     def retrieve(self,request,pk=None):
-        try:
-            # Get chain
-            chain = self.get_object()
-            chain = ChainSerializer(chain)
+        # Get chain
+        chain = self.get_object()
+        chain = ChainSerializer(chain)
 
-            # Get customer
-            customer = Customer.objects.get(pk=pk)
-            customer = CustomerSerializer(customer)
+        customer = Customer.objects.get(pk=int(chain.data['customer']))
+
+        customer = CustomerSerializer(customer)
 
             # Get tickets
-            tickets = []
-            for item in json.loads(chain['tickets'].value):
-                tickets.append(Ticket.objects.get(pk=item))
-            tickets = TicketSerializer(tickets,many=True)
+        tickets = []
+        for item in json.loads(chain['tickets'].value):
+            tickets.append(Ticket.objects.get(pk=item))
+        tickets = TicketSerializer(tickets,many=True)
 
             # Get statuses
-            statuses = []
-            for item in json.loads(chain['statuses'].value):
-                statuses.append(Status.objects.get(pk=item))
-            statuses = StatusSerializer(statuses,many=True)
+        statuses = []
+        for item in json.loads(chain['statuses'].value):
+            statuses.append(Status.objects.get(pk=item))
+        statuses = StatusSerializer(statuses,many=True)
 
-        except Exception as e:
-            print(e)
-            return Response({'error':'Invalid chain id'})
+        chats = []
+        for item in json.loads(chain['chats'].value):
+            chats.append(Chat.objects.get(pk=item))
+        chats = ChatSerializer(chats,many=True)
+
         return Response({'customer': customer.data,
                          'tickets': tickets.data,
                          'statuses': statuses.data,
+                         'chats': chats.data
                         })
 
 class StatusViewSet(viewsets.ModelViewSet):
