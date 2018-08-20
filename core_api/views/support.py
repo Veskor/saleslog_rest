@@ -4,6 +4,7 @@ from django.contrib.auth.models import  Group
 from rest_framework import viewsets
 from rest_framework.response import Response
 from rest_framework.decorators import detail_route
+from rest_framework.permissions import IsAuthenticated
 
 from ..serializers.support import SupportSerializer, UserSerializer, AddUserSerializer
 from ..serializers.ticket import TicketSerializer
@@ -11,10 +12,9 @@ from ..models import Ticket, Support
 from accounts.models import User
 
 class SupportViewset(viewsets.ModelViewSet):
-#    authentication_classes = (TokenAuthentication,)
-#    permission_classes = (IsAuthenticated,)
     serializer_class = SupportSerializer
     queryset = serializer_class.Meta.model.objects.all()
+    permission_classes = (IsAuthenticated,)
 
     def get_serializer_class(self):
         if self.action == 'AddUser' or self.action == 'PopUser':

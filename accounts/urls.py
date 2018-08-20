@@ -5,13 +5,6 @@ import accounts.views
 from rest_framework_jwt.views import obtain_jwt_token
 
 urlpatterns = [
-    '',
-    # ...
-
-]
-
-
-urlpatterns = [
     url(_(r'^user/$'),
         accounts.views.UserCreationView.as_view({'get':'list','post':'create'}),
         name='register'),

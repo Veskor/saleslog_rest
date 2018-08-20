@@ -1,5 +1,7 @@
 from rest_framework import viewsets
 from rest_framework.response import Response
+from rest_framework.permissions import IsAuthenticated
+
 
 from ..serializers.chain import ChainSerializer, StatusSerializer, ChatSerializer, MessageSerializer
 from ..serializers.customer import CustomerSerializer
@@ -12,6 +14,8 @@ import json
 class ChainViewset(viewsets.ModelViewSet):
     serializer_class = ChainSerializer
     queryset = serializer_class.Meta.model.objects.all()
+    permission_classes = (IsAuthenticated,)
+
 
     def retrieve(self,request,pk=None):
         # Get chain

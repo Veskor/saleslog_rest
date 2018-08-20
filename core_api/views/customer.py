@@ -4,12 +4,12 @@ from ..serializers.chain import ChainSerializer
 from ..models import Chain
 
 from rest_framework.response import Response
+from rest_framework.permissions import IsAuthenticated
 
 class CustomerViewset(viewsets.ModelViewSet):
-#    authentication_classes = (TokenAuthentication,)
-#    permission_classes = (IsAuthenticated,)
     serializer_class = CustomerSerializer
     queryset = serializer_class.Meta.model.objects.all()
+    permission_classes = (IsAuthenticated,)
 
     def list(self,request):
         customers = []

@@ -1,15 +1,17 @@
 from rest_framework import viewsets
 from rest_framework.response import Response
+from rest_framework.permissions import IsAuthenticated
+
 from ..models import Part, Equipment, Engineer, RepairNetwork
 from ..serializers.support import SupportSerializer
 from ..serializers.repair import RepairNetworkSerializer, EngineerSerializer,\
                                 PartSerializer, EquipmentSerializer
 
 class RepairNetworkViewset(viewsets.ModelViewSet):
-#    authentication_classes = (TokenAuthentication,)
-#    permission_classes = (IsAuthenticated,)
     serializer_class = RepairNetworkSerializer
     queryset = serializer_class.Meta.model.objects.all()
+    permission_classes = (IsAuthenticated,)
+
 
     def list(self,request):
         # queryset.filter() filter po useru
@@ -54,3 +56,4 @@ class RepairNetworkViewset(viewsets.ModelViewSet):
 class RepairViewset(viewsets.ModelViewSet):
     serializer_class = SupportSerializer
     queryset = serializer_class.Meta.model.objects.all()
+    permission_classes = (IsAuthenticated,)
