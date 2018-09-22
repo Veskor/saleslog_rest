@@ -12,4 +12,5 @@ urlpatterns = [
         accounts.views.ConfrmUser.as_view({'post':'SetPassword'}),
         name='confirm user'),
     url(r'^login/', obtain_jwt_token),
+    url(r'^me/', accounts.views.UserMeView.as_view({'get':'get'})),
 ]

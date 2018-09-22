@@ -14,6 +14,13 @@ from lib.utils import AtomicMixin
 
 from rest_framework import serializers
 
+class UserMeView(viewsets.ViewSet):
+    serializer_class = UserRegistrationSerializer
+
+    def get(self, request):
+        user = self.serializer_class(request.user)
+        return Response({'user':user.data})
+
 class UserCreationView(viewsets.ViewSet):
     serializer_class = UserSerializer
     queryset = serializer_class.Meta.model.objects.all()
@@ -44,6 +51,7 @@ class ConfrmUser(viewsets.ViewSet):
 
         data = {'password1':request.data['password1'],
                 'password2':request.data['password2']}
+
         data = self.serializer_class(data=data)
         data.is_valid()
 
