@@ -1,0 +1,23 @@
+#####
+# Circle CI
+#
+# For running docker images on circle ci, see: https://circleci.com/docs/docker
+# For circle.yml explanation, see: https://circleci.com/docs/manually
+# Python specific configuration, see: https://circleci.com/docs/language-python
+#####
+
+machine:
+    services:
+        - docker
+
+dependencies:
+    pre:
+        - docker info
+        - sudo pip install docker-compose --upgrade
+    post:
+        - docker-compose up -d
+
+# Running tests 'inside' container
+# test:#
+#   override:
+#     - ./docker-compose run -d web python manage.py test
