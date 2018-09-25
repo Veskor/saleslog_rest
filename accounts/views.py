@@ -33,7 +33,11 @@ class UserCreationView(viewsets.ViewSet):
     def create(self,request):
 
         data = self.serializer_class(data=request.data)
-        data.is_valid()
+
+        if not data.is_valid():
+            res = Response()
+            res.status_code = 400
+            return res
 
         data.save()
 
