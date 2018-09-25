@@ -22,12 +22,12 @@ class UserMeView(viewsets.ViewSet):
         return Response({'user':user.data})
 
 class UserCreationView(viewsets.ViewSet):
-    serializer_class = UserSerializer
+    serializer_class = CreateSerializer
     queryset = serializer_class.Meta.model.objects.all()
 
     def list(self,request):
         users = User.objects.all()
-        users = self.serializer_class(users,many=True)
+        users = UserSerializer(users,many=True)
         return Response({"users":users.data})
 
     def create(self,request):

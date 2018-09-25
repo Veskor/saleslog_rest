@@ -81,7 +81,6 @@ class CreateSerializer(serializers.Serializer):
             saved = user.save()
 
         elif(data['user_type'] == MANAGER):
-            print('hey')
             user = User.objects.create_manager(email=data['email'],
                                             first_name=data['first_name'],
                                             last_name=data['last_name'],
@@ -98,7 +97,7 @@ class CreateSerializer(serializers.Serializer):
                                             last_name=data['last_name'],
                                             username=data['username'],
                                             gender=data['gender'],
-                                            password='vexadija')
+                                            password='')
             saved = user.save()
 
         # send email with activation_key
