@@ -8,10 +8,10 @@ from django.utils import timezone
 from django.utils.translation import ugettext_lazy as _
 from django.contrib.auth.models import PermissionsMixin
 
-SALES = 'Sales account'
-ADMIN = 'Admin account'
-MANAGER = 'Manager account'
-SUPER_ADMIN = 'Super user account'
+SALES = 'sales'
+ADMIN = 'admin'
+MANAGER = 'manager'
+SUPER_ADMIN = 'super'
 USER_TYPES = (
     (SALES,'Sales'),
     (ADMIN, 'Admin'),
