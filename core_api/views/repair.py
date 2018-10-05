@@ -2,10 +2,10 @@ from rest_framework import viewsets
 from rest_framework.response import Response
 from rest_framework.permissions import IsAuthenticated
 
-from ..models import Part, Equipment, Engineer, RepairNetwork
+from ..models import Part, Equipment, Engineer, RepairNetwork, Repair
 from ..serializers.support import SupportSerializer
-from ..serializers.repair import RepairNetworkSerializer, EngineerSerializer,\
-                                PartSerializer, EquipmentSerializer
+from ..serializers.repair import RepairNetworkSerializer, EngineerSerializer, StatusSerializer,\
+                                PartSerializer, EquipmentSerializer, RepairSerializer
 
 class RepairNetworkViewset(viewsets.ModelViewSet):
     serializer_class = RepairNetworkSerializer
@@ -33,7 +33,11 @@ class RepairNetworkViewset(viewsets.ModelViewSet):
     def create(self, request, *args, **kwargs):
         obj = RepairNetworkSerializer(data=request.data)
 
-        obj.is_valid()
+        if not obj.is_valid():
+            res = Response(obj.errors)
+            res.status_code = 400
+            return res
+
         obj = obj.save()
 
         pk = obj.id
@@ -53,7 +57,15 @@ class RepairNetworkViewset(viewsets.ModelViewSet):
 # ovo mogu da vide inzinjeri i customeri i komentarisu. kao i support koji
 # i svi admini iz suppporta za ovaj ticker.
 
+
 class RepairViewset(viewsets.ModelViewSet):
-    serializer_class = SupportSerializer
+    serializer_class = RepairSerializer
     queryset = serializer_class.Meta.model.objects.all()
     permission_classes = (IsAuthenticated,)
+
+    def get_queryset(self, *args, **kwargs):
+        return Repair.objects.filter(network=self.kwargs['id'])
+
+    def create(self, request, *args, **kwargs):
+        request.POST['network'] = self.kwargs['id']
+        return super(RepairViewset, self).create(request, *args, **kwargs)

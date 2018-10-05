@@ -13,10 +13,10 @@ ADMIN = 'admin'
 MANAGER = 'manager'
 SUPER_ADMIN = 'super'
 USER_TYPES = (
-    (SALES,'Sales'),
-    (ADMIN, 'Admin'),
-    (MANAGER,'Manager'),
-    (SUPER_ADMIN, 'Super')
+    (SALES,'sales'),
+    (ADMIN, 'admin'),
+    (MANAGER,'manager'),
+    (SUPER_ADMIN, 'super')
 )
 
 class MyUserManager(BaseUserManager):

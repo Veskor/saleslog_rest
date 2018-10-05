@@ -8,31 +8,38 @@ from ..models import *
 
 @receiver(post_save, sender=Status, dispatch_uid='update_ticket_list')
 def update_status_chain(sender, instance, **kwargs):
-    chain = instance.tag
+    try:
+        chain = instance.chain
+    except:
+        chain = ''
+    if chain != '':
 
-    statuses = json.loads(chain.statuses)
+        statuses = json.loads(chain.statuses)
 
-    if not instance.id in statuses:
-        statuses.append(instance.id)
+        if not instance.id in statuses:
+            statuses.append(instance.id)
 
-    data = {'statuses':statuses}
+        data = {'statuses':statuses}
 
-    serialized = ChainSerializer(chain,data=data,partial=True)
+        serialized = ChainSerializer(chain,data=data,partial=True)
 
-    serialized.is_valid()
+        serialized.is_valid()
 
-    saved = serialized.save()
+        saved = serialized.save()
 
 @receiver(post_delete, sender=Status, dispatch_uid='alter_ticket_list')
 def alter_status_chain(sender, instance, **kwargs):
-    chain = instance.tag
+    try:
+        chain = instance.chain
+    except:
+        chain = ''
+    if chain != '':
+        statuses = json.loads(chain.statuses)
+        statuses.remove(instance.id)
+        data = {'statuses':statuses}
 
-    statuses = json.loads(chain.statuses)
-    statuses.remove(instance.id)
-    data = {'statuses':statuses}
+        serialized = ChainSerializer(chain,data=data,partial=True)
 
-    serialized = ChainSerializer(chain,data=data,partial=True)
+        serialized.is_valid()
 
-    serialized.is_valid()
-
-    saved = serialized.save()
+        saved = serialized.save()

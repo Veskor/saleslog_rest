@@ -6,7 +6,7 @@ class RepairNetworkSerializer(serializers.ModelSerializer):
     class Meta:
         model = RepairNetwork
         fields = ('id','name')
-    
+
 class StatusSerializer(serializers.ModelSerializer):
     class Meta:
         model = Status
@@ -29,11 +29,9 @@ class EngineerSerializer(serializers.ModelSerializer):
 
 class RepairSerializer(serializers.ModelSerializer):
 
-    status = StatusSerializer()
-
     class Meta:
         model = Repair
-        fields = ('id','part','equipment','engineer','status')
+        fields = ('id','network','part','equipment','engineer')
 
 #    def validate(self, data):
     # TODO: if part, equipment and engineer is assigned

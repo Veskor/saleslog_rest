@@ -5,11 +5,14 @@ contextlib2==0.5.5
 cryptography==2.2.2
 django-cors-headers==2.2.0
 Django==1.10
+factory-boy==2.11.1
 django-disposable-email-checker==1.2.1
 django-extensions==1.8.1
 django-rest-knox==3.0.3
 djangorestframework==3.6.4
 djangorestframework-jwt==1.11.0
+django-rest-swagger==2.2.0
+django-nose==1.4.5
 idna==2.6
 psycopg2==2.7.3
 pycparser==2.18

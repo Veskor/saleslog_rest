@@ -18,6 +18,7 @@ class Support(models.Model):
 class Customer(models.Model):
     data = models.TextField()
 
+    support = models.ForeignKey(Support)
     payment_done = models.BooleanField(default=True)
     #payment = models.ForeignKey(Payment,null=True,blank=True)
 
@@ -56,18 +57,19 @@ class Engineer(models.Model):
 class Status(models.Model):
     name = models.CharField(max_length=32)
     color = models.CharField(max_length=6,default='')
-    chain = models.ForeignKey(Chain,default='',on_delete=models.CASCADE)
+    chain = models.ForeignKey(Chain,default='',null=True,blank=True)
 
     def __str__(self):
         return self.name
 
 class Repair(models.Model):
-    part = models.ForeignKey(Part,on_delete=models.CASCADE) # 1 > ??? Parts.
-    equipment = models.ForeignKey(Equipment,on_delete=models.CASCADE)
-    engineer = models.ForeignKey(Engineer,on_delete=models.CASCADE)
+    part = models.ForeignKey(Part,on_delete=models.CASCADE,null=True,blank=True) # 1 > ??? Parts.
+    equipment = models.ForeignKey(Equipment,on_delete=models.CASCADE,null=True,blank=True)
+    engineer = models.ForeignKey(Engineer,on_delete=models.CASCADE,null=True,blank=True)
+    network = models.ForeignKey(RepairNetwork)
 
     def __str__(self):
-        return self.status
+        return self.status # ?
 
 class Chat(models.Model):
     TICKET = 'Ticket'
@@ -77,7 +79,7 @@ class Chat(models.Model):
         (MASTER, 'Master')
     )
     origin = models.CharField(max_length=10, choices=TYPE_CHOICES, default=TICKET)
-    tag = models.ForeignKey(Chain,default='',on_delete=models.CASCADE)
+    tag = models.ForeignKey(Chain,default='')
 
 class Message(models.Model):
     text = models.TextField()

@@ -41,9 +41,12 @@ INSTALLED_APPS = (
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'django_nose',
 
     'rest_framework',
     'rest_framework.authtoken',
+    'rest_framework_swagger',
+
     'django_extensions',
     'corsheaders',
 
@@ -105,6 +108,10 @@ DATABASES = {
         'PORT': 5432,
     }
 }
+
+TEST_RUNNER = 'django_nose.NoseTestSuiteRunner'
+
+NOSE_ARGS = ['core_api', 'accounts', '--nologcapture', '--nocapture', ]
 
 WSGI_APPLICATION = 'saleslog_rest.wsgi.application'
 

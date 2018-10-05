@@ -13,7 +13,3 @@ class TicketSerializer(serializers.ModelSerializer):
     class Meta:
         model = Ticket
         fields = ('id','tag','info','repair','support','status')
-
-    def validate_info(self,value):
-        print(self.support)
-        data = json.loads(value)
