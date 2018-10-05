@@ -53,7 +53,12 @@ class SupportViewset(viewsets.ModelViewSet):
             group = get_object_or_404(Group, name=support.name)
             user = get_object_or_404(User,pk=request.data['user_id'])
             group.user_set.add(user)
-            return Response({'id':request.data['user_id']})
+            users = User.objects.exclude(groups=group)
+            assigned = User.objects.filter(groups=group)
+            users = UserSerializer(users,many=True)
+            assigned = UserSerializer(assigned,many=True)
+            return Response({"users": users.data,
+                             "assigned":assigned.data})
 
     @detail_route(methods=['post','get'])
     def pop(self, request, pk=None):
@@ -71,5 +76,9 @@ class SupportViewset(viewsets.ModelViewSet):
             support = get_object_or_404(Support, pk=pk)
             group = get_object_or_404(Group, name=support.name)
             user = get_object_or_404(User,pk=request.data['user_id'])
-            group.user_set.remove(user)
-            return Response({'id':request.data['user_id']})
+            group.user_set.remove(user)users = User.objects.exclude(groups=group)
+            assigned = User.objects.filter(groups=group)
+            users = UserSerializer(users,many=True)
+            assigned = UserSerializer(assigned,many=True)
+            return Response({"users": users.data,
+                             "assigned":assigned.data})
