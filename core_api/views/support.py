@@ -38,11 +38,16 @@ class SupportViewset(viewsets.ModelViewSet):
                          })
 
     @detail_route(methods=['post','get'])
-    def AddUser(self, request, pk=None):
+    def add(self, request, pk=None):
         if request.method == 'GET':
-            users = User.objects.all()
+            support = get_object_or_404(Support, pk=pk)
+            group = get_object_or_404(Group, name=support.name)
+            users = User.objects.exclude(groups=group)
+            assigned = User.objects.filter(groups=group)
             users = UserSerializer(users,many=True)
-            return Response({"users":users.data})
+            assigned = UserSerializer(assigned,many=True)
+            return Response({"users": users.data,
+                             "assigned":assigned.data})
         else:
             support = get_object_or_404(Support, pk=pk)
             group = get_object_or_404(Group, name=support.name)
@@ -51,12 +56,17 @@ class SupportViewset(viewsets.ModelViewSet):
             return Response({'id':request.data['user_id']})
 
     @detail_route(methods=['post','get'])
-    def PopUser(self, request, pk=None):
+    def pop(self, request, pk=None):
         self.serializer_class = AddUserSerializer
         if request.method == 'GET':
-            users = User.objects.all()
+            support = get_object_or_404(Support, pk=pk)
+            group = get_object_or_404(Group, name=support.name)
+            users = User.objects.exclude(groups=group)
+            assigned = User.objects.filter(groups=group)
             users = UserSerializer(users,many=True)
-            return Response({"users":users.data})
+            assigned = UserSerializer(assigned,many=True)
+            return Response({"users": users.data,
+                             "assigned":assigned.data})
         else:
             support = get_object_or_404(Support, pk=pk)
             group = get_object_or_404(Group, name=support.name)
