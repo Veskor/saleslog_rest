@@ -62,7 +62,6 @@ class SupportViewset(viewsets.ModelViewSet):
 
     @detail_route(methods=['post','get'])
     def pop(self, request, pk=None):
-        self.serializer_class = AddUserSerializer
         if request.method == 'GET':
             support = get_object_or_404(Support, pk=pk)
             group = get_object_or_404(Group, name=support.name)
