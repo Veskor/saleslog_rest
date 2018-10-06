@@ -10,7 +10,7 @@ class SupportSerializer(serializers.ModelSerializer):
         fields = ('id','name','network','fields','ip')
 
 class UserSerializer(serializers.Serializer):
-    id = serializers.IntegerField()
+    id = serializers.CharField()
     username = serializers.CharField()
     email = serializers.EmailField()
     class Meta:
