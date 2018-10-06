@@ -37,6 +37,11 @@ class SupportViewset(viewsets.ModelViewSet):
                          'users': users.data
                          })
 
+    def create(self, request, *args, **kwargs):
+        print('hey')
+        super(SupportViewset, self).create(request, *args, **kwargs)
+        return super(SupportViewset, self).list(request, *args, **kwargs)
+
     @detail_route(methods=['post','get'])
     def add(self, request, pk=None):
         if request.method == 'GET':
