@@ -1,5 +1,20 @@
 from django.db import models
 
+class Relation(models.Model):
+    model = models.CharField(max_length=32, choices=[('Support','Support'),('Network','Network')])
+    model_id = models.PositiveIntegerField()
+
+    @property
+    def name(self):
+        id = self.model_id
+        if self.model == 'Support':
+            return 'Support ' + str(Support.objects.get(id=id).id)
+        else:
+            return 'Repair ' + str(RepairNetwork.objects.get(id=id).id)
+
+    def __str__(self):
+        self.name
+
 class RepairNetwork(models.Model):
     name = models.CharField(max_length=32)
 
@@ -54,10 +69,17 @@ class Engineer(models.Model):
     def __str__(self):
         return self.username
 
+class StatusType(models.Model):
+    relation = models.ForeignKey(Relation,null=True,blank=True)
+
+    def __str__(self):
+        return self.relation.name
+
 class Status(models.Model):
     name = models.CharField(max_length=32)
     color = models.CharField(max_length=6,default='')
     chain = models.ForeignKey(Chain,default='',null=True,blank=True)
+    status_type = models.ForeignKey(StatusType,null=True,blank=True)
 
     def __str__(self):
         return self.name
@@ -94,6 +116,7 @@ class Ticket(models.Model):
     support = models.ForeignKey(Support,default='',on_delete=models.CASCADE)
     status = models.ForeignKey(Status,blank=True,null=True,on_delete=models.CASCADE)
     chat = models.ForeignKey(Chat,blank=True,null=True,on_delete=models.CASCADE)
+
 
 
 #class Payment(models.Model):

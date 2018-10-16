@@ -1,4 +1,4 @@
-from ..models import Chain, Status, Chat, Message
+from ..models import Chain, Status, Chat, Message, Relation, StatusType
 from rest_framework import serializers
 
 class ChainSerializer(serializers.ModelSerializer):
@@ -11,10 +11,23 @@ class ChainSerializer(serializers.ModelSerializer):
         model = Chain
         fields = ('id','tickets','statuses','chats','customer')
 
+class RelationSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Relation
+        fields = ('model','model_id','id','name')
+
+    # def validate(self, data):
+    #     for item in Relation.objects.all():
+    #         name = data['model'] + ' ' + str(data['model_id'])
+    #         if name == str(item):
+    #             return False
+    #     return data
 class StatusSerializer(serializers.ModelSerializer):
+    relation = RelationSerializer(required=False)
+
     class Meta:
         model = Status
-        fields = ('id','name','color')
+        fields = ('id','name','color','status_type','relation')
 
 class MessageSerializer(serializers.ModelSerializer):
     class Meta:

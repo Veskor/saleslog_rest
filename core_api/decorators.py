@@ -3,7 +3,6 @@ import json
 def create_sub_model(serializer):
     def _method_wrapper(function):
         def _arguments_wrapper(self, *args, **kwargs):
-
             obj_data = {}
             for item in self.request.POST:
                 if serializer.Meta.model.__name__.lower() in item:
@@ -14,6 +13,8 @@ def create_sub_model(serializer):
 
             if obj.is_valid():
                 obj.save()
+            else:
+                obj = None
             return function(self, self.request, obj, *args, **kwargs)
 
         return _arguments_wrapper

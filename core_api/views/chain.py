@@ -1,13 +1,13 @@
 from rest_framework import viewsets
 from rest_framework.response import Response
 from rest_framework.permissions import IsAuthenticated
+from ..serializers.chain import ChainSerializer, StatusSerializer, ChatSerializer, \
+                                MessageSerializer, RelationSerializer
 
-
-from ..serializers.chain import ChainSerializer, StatusSerializer, ChatSerializer, MessageSerializer
 from ..serializers.customer import CustomerSerializer
 from ..serializers.ticket import TicketSerializer
-
-from ..models import Customer, Ticket, Status, Chat
+from ..decorators import create_sub_model
+from ..models import Customer, Ticket, Status, Chat, StatusType
 
 import json
 
@@ -52,6 +52,22 @@ class ChainViewset(viewsets.ModelViewSet):
 class StatusViewSet(viewsets.ModelViewSet):
     serializer_class = StatusSerializer
     queryset = serializer_class.Meta.model.objects.all()
+
+    @create_sub_model(RelationSerializer)
+    def create(self, request, obj, *args, **kwargs):
+        if obj != None:
+            type , created = StatusType.objects.get_or_create(relation=obj.instance)
+            request.POST['status_type'] = type.id
+        del request.POST['relation.model']
+        del request.POST['relation.model_id']
+        return super(viewsets.ModelViewSet, self).create(request)
+
+    def list(self, request):
+        try:
+            self.queryset = Status.objects.filter(status_type=request.GET['status_type'])
+        except:
+            pass
+        return super(StatusViewSet, self).list(request)
 
 class ChatsViewSet(viewsets.ModelViewSet):
     serializer_class = ChatSerializer
