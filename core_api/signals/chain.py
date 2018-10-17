@@ -47,8 +47,7 @@ def delete_chain(sender, instance, **kwargs):
 @receiver(post_save, sender=Ticket, dispatch_uid='update_ticket_list')
 def update_chain(sender, instance, **kwargs):
     chain = instance.tag
-    print('hey')
-    tickets = json.loads(chain.tickets)
+    tickets = json.loads(str(chain.tickets))
 
     if not instance.id in tickets:
         tickets.append(instance.id)
@@ -61,11 +60,11 @@ def update_chain(sender, instance, **kwargs):
 
     saved = serialized.save()
 
-@receiver(post_delete, sender=Ticket, dispatch_uid='alter_ticket_list')
+@receiver(pre_delete, sender=Ticket, dispatch_uid='alter_ticket_list')
 def alter_chain(sender, instance, **kwargs):
     chain = instance.tag
 
-    tickets = json.loads(chain.tickets)
+    tickets = json.loads(str(chain.tickets))
     tickets.remove(instance.id)
     data = {'tickets':tickets}
 
@@ -77,7 +76,7 @@ def alter_chain(sender, instance, **kwargs):
 
 # Chat updater
 @receiver(post_save, sender=Chat, dispatch_uid='update_chat_list')
-def update_chain(sender, instance, **kwargs):
+def update_chain_chat(sender, instance, **kwargs):
     chain = instance.tag
 
     chats = json.loads(chain.chats)

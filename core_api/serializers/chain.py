@@ -23,11 +23,9 @@ class RelationSerializer(serializers.ModelSerializer):
     #             return False
     #     return data
 class StatusSerializer(serializers.ModelSerializer):
-    relation = RelationSerializer(required=False)
-
     class Meta:
         model = Status
-        fields = ('id','name','color','status_type','relation')
+        fields = ('id','name','color','status_type')
 
 class MessageSerializer(serializers.ModelSerializer):
     class Meta:

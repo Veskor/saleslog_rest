@@ -42,3 +42,11 @@ def create_role(sender, instance, **kwargs):
         group.save()
 
     group.permissions = [can_edit_tickets,can_view_tickets,can_edit_customers,can_view_customers]
+
+    relation = Relation.objects.create(model='Support',model_id=instance.id)
+
+    relation.save()
+
+    status_type = StatusType.objects.create(relation=relation)
+
+    status_type.save()

@@ -26,9 +26,9 @@ class TestCustomer(APITestCase):
         }
 
         response = self.client.post('/api/v1/customer/', data)
-        chain = Chain.objects.filter(customer=response.data['chain'])
+        chain = Chain.objects.filter(customer=response.data[0]['chain'])
         self.assertNotEqual(chain,[])
-        self.assertEqual(response.status_code,status.HTTP_201_CREATED)
+        self.assertEqual(response.status_code,200)
 
     def test_list_customers(self):
         response = self.client.get('/api/v1/customer/')

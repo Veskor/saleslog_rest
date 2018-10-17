@@ -39,7 +39,7 @@ class Customer(models.Model):
 
 class Chain(models.Model):
     tickets = models.TextField(null=True)
-    customer = models.ForeignKey(Customer,on_delete=models.CASCADE)
+    customer = models.ForeignKey(Customer)
     statuses = models.TextField(null=True)
     chats = models.TextField(null=True)
 #    service_plan = models.ForgeinKey('Payment')
@@ -50,21 +50,21 @@ class Chain(models.Model):
 class Part(models.Model):
     name = models.CharField(max_length=32)
     quantity = models.IntegerField()
-    network = models.ForeignKey(RepairNetwork,default='',on_delete=models.CASCADE)
+    network = models.ForeignKey(RepairNetwork,default='')
 
     def __str__(self):
         return self.name
 
 class Equipment(models.Model):
     name = models.CharField(max_length=32)
-    network = models.ForeignKey(RepairNetwork,default='',on_delete=models.CASCADE)
+    network = models.ForeignKey(RepairNetwork,default='',)
 
     def __str__(self):
         return self.name
 
 class Engineer(models.Model):
     username = models.CharField(max_length=32)
-    network = models.ForeignKey(RepairNetwork,default='',on_delete=models.CASCADE)
+    network = models.ForeignKey(RepairNetwork,default='')
 
     def __str__(self):
         return self.username
@@ -87,7 +87,7 @@ class Status(models.Model):
 class Repair(models.Model):
     part = models.ForeignKey(Part,on_delete=models.CASCADE,null=True,blank=True) # 1 > ??? Parts.
     equipment = models.ForeignKey(Equipment,on_delete=models.CASCADE,null=True,blank=True)
-    engineer = models.ForeignKey(Engineer,on_delete=models.CASCADE,null=True,blank=True)
+    engineer = models.ForeignKey(Engineer,null=True,blank=True)
     network = models.ForeignKey(RepairNetwork)
 
     def __str__(self):
@@ -107,15 +107,15 @@ class Message(models.Model):
     text = models.TextField()
     date = models.DateTimeField(auto_now_add=True)
     source = models.CharField(max_length=32)
-    chat = models.ForeignKey(Chat,default='',on_delete=models.CASCADE)
+    chat = models.ForeignKey(Chat,default='')
 
 class Ticket(models.Model):
-    tag = models.ForeignKey(Chain,on_delete=models.CASCADE)
+    tag = models.ForeignKey(Chain,null=True,blank=True)
     info = models.TextField()
     repair = models.ForeignKey(Repair,blank=True,null=True,on_delete=models.CASCADE)
-    support = models.ForeignKey(Support,default='',on_delete=models.CASCADE)
-    status = models.ForeignKey(Status,blank=True,null=True,on_delete=models.CASCADE)
-    chat = models.ForeignKey(Chat,blank=True,null=True,on_delete=models.CASCADE)
+    support = models.ForeignKey(Support,default='')
+    status = models.ForeignKey(Status,blank=True,null=True)
+    chat = models.ForeignKey(Chat,blank=True,null=True)
 
 
 

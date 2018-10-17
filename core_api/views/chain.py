@@ -53,15 +53,6 @@ class StatusViewSet(viewsets.ModelViewSet):
     serializer_class = StatusSerializer
     queryset = serializer_class.Meta.model.objects.all()
 
-    @create_sub_model(RelationSerializer)
-    def create(self, request, obj, *args, **kwargs):
-        if obj != None:
-            type , created = StatusType.objects.get_or_create(relation=obj.instance)
-            request.POST['status_type'] = type.id
-        del request.POST['relation.model']
-        del request.POST['relation.model_id']
-        return super(viewsets.ModelViewSet, self).create(request)
-
     def list(self, request):
         try:
             self.queryset = Status.objects.filter(status_type=request.GET['status_type'])

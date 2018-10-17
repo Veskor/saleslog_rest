@@ -32,7 +32,7 @@ class TestSupport(APITestCase):
             'fields': '{}'
         }
         response = self.client.post('/api/v1/support/',data=data)
-        self.assertEqual(response.status_code,status.HTTP_201_CREATED)
+        self.assertEqual(response.status_code,200)
 
 
     def test_delete(self):

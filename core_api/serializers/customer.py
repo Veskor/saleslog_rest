@@ -16,5 +16,7 @@ class CustomerSerializer(serializers.ModelSerializer):
                   'payment_done')
 
     def get_chain(self, obj):
-        return Chain.objects.get(customer=obj.id).id
-        
+        try:
+            return Chain.objects.get(customer=obj.id).id
+        except:
+            return ''

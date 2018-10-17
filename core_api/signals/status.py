@@ -6,13 +6,13 @@ from ..serializers.chain import ChainSerializer
 
 from ..models import *
 
-@receiver(post_save, sender=Status, dispatch_uid='update_ticket_list')
+@receiver(post_save, sender=Status, dispatch_uid='update_status_list')
 def update_status_chain(sender, instance, **kwargs):
     try:
         chain = instance.chain
     except:
         chain = ''
-    if chain != '':
+    if chain:
 
         statuses = json.loads(chain.statuses)
 
@@ -27,13 +27,13 @@ def update_status_chain(sender, instance, **kwargs):
 
         saved = serialized.save()
 
-@receiver(post_delete, sender=Status, dispatch_uid='alter_ticket_list')
+@receiver(post_delete, sender=Status, dispatch_uid='alter_status_list')
 def alter_status_chain(sender, instance, **kwargs):
     try:
         chain = instance.chain
     except:
         chain = ''
-    if chain != '':
+    if chain:
         statuses = json.loads(chain.statuses)
         statuses.remove(instance.id)
         data = {'statuses':statuses}
