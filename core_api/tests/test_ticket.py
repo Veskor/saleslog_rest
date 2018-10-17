@@ -8,7 +8,7 @@ from core_api.factories.support import SupportFactory
 from core_api.factories.repair import RepairFactory
 from accounts.factories.user import AdminFactory
 
-from core_api.models import Ticket, Chain, Status, StatusType
+from core_api.models import Ticket, Chain, Status, StatusType, Customer
 
 import json
 
@@ -20,12 +20,14 @@ class TestTicket(APITestCase):
         self.admin.save()
         self.support = SupportFactory()
         self.support.save()
-        self.customer = CustomerFactory()
+        self.customer = Customer.objects.create(data="{}",
+                                                support=self.support,
+                                                payment_done=True)
         self.customer.save()
         self.chain = Chain.objects.get(customer=self.customer.id)
         self.status_type = StatusType.objects\
                                      .filter(relation__model='Support',
-                                             relation__model_id=self.support.id
+                                             relation__model_id=self.support.id,
                                              )[0]
         self.status = Status.objects.create(name='Test Status',
                                             color='White',

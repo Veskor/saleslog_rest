@@ -52,6 +52,11 @@ def update_chain(sender, instance, **kwargs):
     if not instance.id in tickets:
         tickets.append(instance.id)
 
+    if instance.status:
+        statuses = json.loads(str(chain.statuses))
+        if not instance.status in statuses:
+            tickets.append(instance.status.id)
+
     data = {'tickets':tickets}
 
     serialized = ChainSerializer(chain,data=data,partial=True)

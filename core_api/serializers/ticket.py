@@ -13,3 +13,9 @@ class TicketSerializer(serializers.ModelSerializer):
     class Meta:
         model = Ticket
         fields = ('id','tag','info','repair','support','status')
+
+    def validate_status(self, status):
+        if status.status_type.relation.model == 'Support':
+            if int(self.initial_data['support']) == status.status_type.relation.model_id:
+                return status
+        raise serializers.ValidationError("Support id's wrong")
