@@ -1,13 +1,18 @@
 from rest_framework import serializers
-from ..models import Support
+from ..models import Support, StatusType
 from django.contrib.auth.models import User
 
 class SupportSerializer(serializers.ModelSerializer):
     fields = serializers.JSONField()
     ip = serializers.IPAddressField()
+    status_type = serializers.SerializerMethodField()
+
     class Meta:
         model = Support
-        fields = ('id','name','network','fields','ip')
+        fields = ('id','name','network','fields','ip','status_type')
+
+    def get_status_type(self, obj):
+        return StatusType.objects.get(relation__model='Support',relation__model_id=obj.id).id
 
 class UserSerializer(serializers.Serializer):
     id = serializers.CharField()
