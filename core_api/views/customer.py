@@ -26,6 +26,15 @@ class CustomerViewset(viewsets.ModelViewSet):
         super(CustomerViewset, self).create(request, *args, **kwargs)
         return super(CustomerViewset, self).list(request, *args, **kwargs)
 
+    def list(self, request, *args, **kwargs):
+        try:
+            pk = request.GET.get('pk','')
+            self.queryset = self.queryset.filter(support=pk)
+        except:
+            pass
+
+        return super(CustomerViewset, self).list(request, *args, **kwargs)
+
     @detail_route(methods=['put','get'])
     @create_sub_model_on_detail(StatusSerializer)
     def status(self, request, obj, pk=None):
