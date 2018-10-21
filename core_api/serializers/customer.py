@@ -23,7 +23,10 @@ class CustomerSerializer(serializers.ModelSerializer):
 
 class StatusCustomerSerializer(serializers.Serializer):
     statuses = []
-    for item in Status.objects.all():
-        statuses.append((item.id,item.name))
+    try:
+        for item in Status.objects.all():
+            statuses.append((item.id,item.name))
+    except:
+        pass
     id = serializers.ChoiceField(choices=statuses,allow_blank=True)
     status = StatusSerializer()
