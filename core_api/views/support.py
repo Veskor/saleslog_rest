@@ -28,7 +28,7 @@ class SupportViewset(viewsets.ModelViewSet):
 
         support = SupportSerializer(self.get_object())
 
-        group = Group.objects.filter(name=support.data['name'])[0]
+        group = Group.objects.filter(name=support.data['name']+':'+str(support.data['id']))[0]
         users = User.objects.filter(groups=group.id)
         users = UserSerializer(users,many=True)
 

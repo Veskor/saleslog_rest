@@ -10,7 +10,7 @@ from django.contrib.contenttypes.models import ContentType
 def create_role(sender, instance, **kwargs):
     # Tickets
     ticket_ct = ContentType.objects.get(model='ticket')
-    name = instance.name
+    name = instance.name + ':' + str(instance.id)
 
     can_edit_tickets, created = Permission.objects.get_or_create(name='Can Edit {}'.format(name), codename='can_edit_tickets_{}'.format(name),
                        content_type=ticket_ct)
@@ -36,7 +36,7 @@ def create_role(sender, instance, **kwargs):
     if created == True:
         can_edit_customers.save()
 
-    group, created = Group.objects.get_or_create(name=instance.name)
+    group, created = Group.objects.get_or_create(name=name)
 
     if created == True:
         group.save()

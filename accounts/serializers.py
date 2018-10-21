@@ -5,6 +5,7 @@ from lib.utils import validate_email as email_is_valid
 
 from accounts.models import User, USER_TYPES, SALES, \
                             ADMIN, MANAGER, SUPER_ADMIN
+import json
 
 class UserSerializer(serializers.ModelSerializer):
     class Meta:
@@ -14,11 +15,17 @@ class UserSerializer(serializers.ModelSerializer):
 
 class UserRegistrationSerializer(serializers.ModelSerializer):
     email = serializers.EmailField()
+    groups = serializers.SerializerMethodField()
 
     class Meta:
         model = User
-        fields = ('id','username', 'email', 'first_name', 'last_name', 'password','user_type')
+        fields = ('id','username', 'email', 'first_name', 'last_name', 'password','user_type', 'groups')
 
+    def get_groups(self, value):
+        groups = []
+        for item in self.instance.groups.all():
+            groups.append(item.name)
+        return groups
     def create(self, validated_data):
         """
         Create the object.
