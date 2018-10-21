@@ -38,7 +38,6 @@ class SupportViewset(viewsets.ModelViewSet):
                          })
 
     def create(self, request, *args, **kwargs):
-        print('hey')
         super(SupportViewset, self).create(request, *args, **kwargs)
         return super(SupportViewset, self).list(request, *args, **kwargs)
 
@@ -46,7 +45,7 @@ class SupportViewset(viewsets.ModelViewSet):
     def add(self, request, pk=None):
         if request.method == 'GET':
             support = get_object_or_404(Support, pk=pk)
-            group = get_object_or_404(Group, name=support.name)
+            group = get_object_or_404(Group, name=support.name+':'+str(support.id))
             users = User.objects.exclude(groups=group)
             assigned = User.objects.filter(groups=group)
             users = UserSerializer(users,many=True)
@@ -55,7 +54,7 @@ class SupportViewset(viewsets.ModelViewSet):
                              "assigned":assigned.data})
         else:
             support = get_object_or_404(Support, pk=pk)
-            group = get_object_or_404(Group, name=support.name)
+            group = get_object_or_404(Group, name=support.name+':'+str(support.id))
             user = get_object_or_404(User,pk=request.data['user_id'])
             group.user_set.add(user)
             users = User.objects.exclude(groups=group)
@@ -69,7 +68,7 @@ class SupportViewset(viewsets.ModelViewSet):
     def pop(self, request, pk=None):
         if request.method == 'GET':
             support = get_object_or_404(Support, pk=pk)
-            group = get_object_or_404(Group, name=support.name)
+            group = get_object_or_404(Group, name=support.name +':'+str(support.id))
             users = User.objects.exclude(groups=group)
             assigned = User.objects.filter(groups=group)
             users = UserSerializer(users,many=True)
@@ -78,7 +77,7 @@ class SupportViewset(viewsets.ModelViewSet):
                              "assigned":assigned.data})
         else:
             support = get_object_or_404(Support, pk=pk)
-            group = get_object_or_404(Group, name=support.name)
+            group = get_object_or_404(Group, name=support.name+':'+str(support.id))
             user = get_object_or_404(User,pk=request.data['user_id'])
             group.user_set.remove(user)
             users = User.objects.exclude(groups=group)
