@@ -17,7 +17,7 @@ class SupportViewset(viewsets.ModelViewSet):
     permission_classes = (IsAuthenticated,)
 
     def get_serializer_class(self):
-        if self.action == 'AddUser' or self.action == 'PopUser':
+        if self.action == 'add' or self.action == 'pop':
             return AddUserSerializer
         return SupportSerializer
 
