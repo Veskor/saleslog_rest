@@ -1,7 +1,7 @@
 from rest_framework import viewsets
 from rest_framework import filters
 
-from ..serializers.customer import CustomerSerializer, StatusCustomerSerializer
+from ..serializers.customer import CustomerSerializer, StatusCustomerSerializer, StatusCustomerDeleteSerializer
 from ..serializers.chain import ChainSerializer, StatusSerializer
 from ..models import Chain, Status
 from ..decorators import create_sub_model_on_detail
@@ -42,6 +42,8 @@ class CustomerViewset(viewsets.ModelViewSet):
 
     def get_serializer_class(self):
         if self.action == 'status':
+            if self.request.method == 'PUT':
+                return StatusCustomerDeleteSerializer
             return StatusCustomerSerializer
         else:
             return CustomerSerializer
@@ -59,21 +61,29 @@ class CustomerViewset(viewsets.ModelViewSet):
 
         return super(CustomerViewset, self).list(request, *args, **kwargs)
 
-    @detail_route(methods=['put','get'])
+    @detail_route(methods=['put','get','post'])
     @create_sub_model_on_detail(StatusSerializer)
     def status(self, request, obj, pk=None):
         customer = self.get_object()
+        chain = Chain.objects.get(customer=customer.id)
+        statuses = json.loads(chain.statuses)
+
+        if request.method == 'PUT':
+            status = Status.objects.get(id=request.data['id'])
+
+            if status.id in statuses:
+                statuses.remove(status.id)
+                chain.statuses = json.dumps(statuses)
+                chain.save()
+                return Response(statuses)
+
         if request.method == 'GET':
-            return Response(customer.support.id)
+            return Response(statuses)
+
         if obj:
             status = obj.instance
         else:
             status = Status.objects.get(id=request.data['id'])
-
-        print(status)
-        chain = Chain.objects.get(customer=customer.id)
-
-        statuses = json.loads(chain.statuses)
 
         if status.status_type.relation.model == 'Support':
             if status.status_type.relation.model_id == customer.support.id:
@@ -81,7 +91,8 @@ class CustomerViewset(viewsets.ModelViewSet):
                     statuses.append(status.id)
                     chain.statuses = json.dumps(statuses)
                     chain.save()
-                    return Response('Status successfuly added to customer')
+                    return Response(statuses)
                 else:
                     return Response('Status allready added')
+
         return Response('support ids not matching')
