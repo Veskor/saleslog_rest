@@ -46,24 +46,25 @@ def delete_chain(sender, instance, **kwargs):
 # ---
 @receiver(post_save, sender=Ticket, dispatch_uid='update_ticket_list')
 def update_chain(sender, instance, **kwargs):
-    chain = instance.tag
-    tickets = json.loads(str(chain.tickets))
+    if instance.tag:
+        chain = instance.tag
+        tickets = json.loads(str(chain.tickets))
 
-    if not instance.id in tickets:
-        tickets.append(instance.id)
+        if not instance.id in tickets:
+            tickets.append(instance.id)
 
-    if instance.status:
-        statuses = json.loads(str(chain.statuses))
-        if not instance.status in statuses:
-            tickets.append(instance.status.id)
+        if instance.status:
+            statuses = json.loads(str(chain.statuses))
+            if not instance.status in statuses:
+                tickets.append(instance.status.id)
 
-    data = {'tickets':tickets}
+        data = {'tickets':tickets}
 
-    serialized = ChainSerializer(chain,data=data,partial=True)
+        serialized = ChainSerializer(chain,data=data,partial=True)
 
-    serialized.is_valid()
+        serialized.is_valid()
 
-    saved = serialized.save()
+        saved = serialized.save()
 
 @receiver(pre_delete, sender=Ticket, dispatch_uid='alter_ticket_list')
 def alter_chain(sender, instance, **kwargs):
