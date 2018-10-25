@@ -13,6 +13,14 @@ from rest_framework.decorators import detail_route
 
 import json
 
+def get_statuses(ids):
+    statuses = []
+
+    for id in ids:
+        data = StatusSerializer(instance=Status.objects.get(id=id))
+        statuses.append(data.data)
+    return statuses
+
 class FilterJSON(filters.BaseFilterBackend):
     """
     Filter that only allows users to see their own objects.
@@ -75,10 +83,11 @@ class CustomerViewset(viewsets.ModelViewSet):
                 statuses.remove(status.id)
                 chain.statuses = json.dumps(statuses)
                 chain.save()
-                return Response(statuses)
+                get_status()
+                return Response(get_statuses(statuses))
 
         if request.method == 'GET':
-            return Response(statuses)
+            return Response(get_statuses(statuses))
 
         if obj:
             status = obj.instance
@@ -91,7 +100,7 @@ class CustomerViewset(viewsets.ModelViewSet):
                     statuses.append(status.id)
                     chain.statuses = json.dumps(statuses)
                     chain.save()
-                    return Response(statuses)
+                    return Response(get_statuses(statuses))
                 else:
                     return Response('Status allready added')
 
