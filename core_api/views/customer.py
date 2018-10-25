@@ -83,7 +83,6 @@ class CustomerViewset(viewsets.ModelViewSet):
                 statuses.remove(status.id)
                 chain.statuses = json.dumps(statuses)
                 chain.save()
-                get_status()
                 return Response(get_statuses(statuses))
 
         if request.method == 'GET':
