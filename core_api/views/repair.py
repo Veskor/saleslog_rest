@@ -11,6 +11,7 @@ class RepairNetworkViewset(viewsets.ModelViewSet):
     serializer_class = RepairNetworkSerializer
     queryset = serializer_class.Meta.model.objects.all()
     permission_classes = (IsAuthenticated,)
+    pagination_class = None
 
 
     def list(self,request):
@@ -62,6 +63,7 @@ class RepairViewset(viewsets.ModelViewSet):
     serializer_class = RepairSerializer
     queryset = serializer_class.Meta.model.objects.all()
     permission_classes = (IsAuthenticated,)
+    pagination_class = None
 
     def get_queryset(self, *args, **kwargs):
         return Repair.objects.filter(network=self.kwargs['id'])

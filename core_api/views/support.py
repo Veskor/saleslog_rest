@@ -15,6 +15,7 @@ class SupportViewset(viewsets.ModelViewSet):
     serializer_class = SupportSerializer
     queryset = serializer_class.Meta.model.objects.all()
     permission_classes = (IsAuthenticated,)
+    pagination_class = None
 
     def get_serializer_class(self):
         if self.action == 'add' or self.action == 'pop':

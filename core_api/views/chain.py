@@ -15,6 +15,7 @@ class ChainViewset(viewsets.ModelViewSet):
     serializer_class = ChainSerializer
     queryset = serializer_class.Meta.model.objects.all()
     permission_classes = (IsAuthenticated,)
+    pagination_class = None
 
 
     def retrieve(self,request,pk=None):
@@ -52,6 +53,7 @@ class ChainViewset(viewsets.ModelViewSet):
 class StatusViewSet(viewsets.ModelViewSet):
     serializer_class = StatusSerializer
     queryset = serializer_class.Meta.model.objects.all()
+    pagination_class = None
 
     def list(self, request):
         try:
@@ -63,10 +65,12 @@ class StatusViewSet(viewsets.ModelViewSet):
 class ChatsViewSet(viewsets.ModelViewSet):
     serializer_class = ChatSerializer
     queryset = serializer_class.Meta.model.objects.all()
+    pagination_class = None
 
 class MessageViewSet(viewsets.ModelViewSet):
     serializer_class = MessageSerializer
     queryset = serializer_class.Meta.model.objects.all()
+    pagination_class = None
 
     def list(self,request):
         return Response({'error':'403 FORBIDDEN'})
