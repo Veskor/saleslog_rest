@@ -63,6 +63,16 @@ class CustomerViewset(viewsets.ModelViewSet):
         except:
             pass
 
+        if len(self.queryset) == 0:
+            support = Support.objects.get(pk=pk)
+            header = []
+            try:
+                for item in json.loads(support.fields):
+                    header.append(item['name'])
+            except:
+                header = []
+
+            return Response(header)
         return super(CustomerViewset, self).list(request, *args, **kwargs)
 
     @detail_route(methods=['put','get','post'])
