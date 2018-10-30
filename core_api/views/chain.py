@@ -74,3 +74,7 @@ class MessageViewSet(viewsets.ModelViewSet):
 
     def list(self,request):
         return Response({'error':'403 FORBIDDEN'})
+
+    def create(self, request):
+        super(MessageViewSet,self).create(request)
+        return Response(ChatSerializer(instance=Chat.objects.get(id=request.data['chat'])).data)
