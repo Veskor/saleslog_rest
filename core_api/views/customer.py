@@ -56,10 +56,6 @@ class CustomerViewset(viewsets.ModelViewSet):
         else:
             return CustomerSerializer
 
-    def create(self, request, *args, **kwargs):
-        super(CustomerViewset, self).create(request, *args, **kwargs)
-        return super(CustomerViewset, self).list(request, *args, **kwargs)
-
     def list(self, request, *args, **kwargs):
         try:
             pk = request.GET.get('pk','')
