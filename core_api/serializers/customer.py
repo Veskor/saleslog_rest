@@ -5,7 +5,7 @@ from rest_framework import serializers
 class CustomerSerializer(serializers.ModelSerializer):
 
     data = serializers.JSONField()
-    extra_data = serializers.JSONField()
+    extra_data = serializers.JSONField(required=False)
     chain = serializers.SerializerMethodField()
 
     class Meta:
