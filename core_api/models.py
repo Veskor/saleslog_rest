@@ -32,7 +32,7 @@ class Support(models.Model):
 
 class Customer(models.Model):
     data = models.TextField()
-    extra_data = models.TextField()
+    extra_data = models.TextField(null=True,blank=True)
     support = models.ForeignKey(Support)
     payment_done = models.BooleanField(default=True)
     #payment = models.ForeignKey(Payment,null=True,blank=True)
