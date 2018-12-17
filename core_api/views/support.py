@@ -8,8 +8,10 @@ from rest_framework.permissions import IsAuthenticated
 
 from ..serializers.support import SupportSerializer, UserSerializer, AddUserSerializer
 from ..serializers.ticket import TicketSerializer
-from ..models import Ticket, Support
+from ..models import Ticket, Support, Customer
 from accounts.models import User
+
+import json
 
 class SupportViewset(viewsets.ModelViewSet):
     serializer_class = SupportSerializer
@@ -21,6 +23,29 @@ class SupportViewset(viewsets.ModelViewSet):
         if self.action == 'add' or self.action == 'pop':
             return AddUserSerializer
         return SupportSerializer
+
+    def update(self, request, pk):
+        support = self.get_object()
+        customers = Customer.objects.filter(support=pk)
+
+        for customer in customers:
+
+            data = json.loads(customer.data)
+            extra_data = json.loads(customer.extra_data)
+
+            for item in self.request.data['delFields']:
+                # move from one list to another
+                if data.get(item['name'],None):
+                    extra_data[item['name']] = data[item['name']]
+            for item in self.request.data['newFields']:
+                # add field to the list
+                data[item['name']] = ''
+
+            customer.data = json.dumps(new_data)
+            customer.extra_data = json.dumps(extra_data)
+            customer.save()
+
+        return super(SupportViewset, self).update(request, pk)
 
     def retrieve(self,request,pk=None):
 

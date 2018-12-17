@@ -3,7 +3,7 @@ from rest_framework import filters
 
 from ..serializers.customer import CustomerSerializer, StatusCustomerSerializer, StatusCustomerDeleteSerializer
 from ..serializers.chain import ChainSerializer, StatusSerializer
-from ..models import Chain, Status
+from ..models import Chain, Status, Support
 from ..decorators import create_sub_model_on_detail
 from ..pagination import LargeResultsSetPagination
 
