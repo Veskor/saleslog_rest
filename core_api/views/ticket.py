@@ -10,7 +10,3 @@ class TicketViewset(viewsets.ModelViewSet):
     serializer_class = TicketSerializer
     queryset = serializer_class.Meta.model.objects.all()
     pagination_class = LargeResultsSetPagination
-
-    def create(self, request, *args, **kwargs):
-        super(TicketViewset, self).create(request, *args, **kwargs)
-        return super(TicketViewset, self).list(request, *args, **kwargs)
