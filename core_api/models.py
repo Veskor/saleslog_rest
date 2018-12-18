@@ -26,6 +26,7 @@ class Support(models.Model):
     ip = models.GenericIPAddressField(protocol='IPv4')
     network = models.ForeignKey(RepairNetwork,on_delete=models.CASCADE)
     fields = models.TextField(default='')
+    logo = models.FileField(upload_to='support_logos')
 
     def __str__(self):
         return self.name
@@ -101,7 +102,7 @@ class Chat(models.Model):
         (MASTER, 'Master')
     )
     origin = models.CharField(max_length=10, choices=TYPE_CHOICES, default=TICKET)
-    tag = models.ForeignKey(Chain,default='')
+    tag = models.ForeignKey(Chain,default='',null=True,blank=True)
 
 class Message(models.Model):
     text = models.TextField()

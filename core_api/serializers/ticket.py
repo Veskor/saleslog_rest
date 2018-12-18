@@ -1,6 +1,6 @@
 from ..models import Ticket, Chain
 from rest_framework import serializers
-from .chain import ChainSerializer
+from .chain import ChainSerializer, ChatSerializer
 from .repair import RepairSerializer
 
 import json
@@ -12,4 +12,4 @@ class TicketSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Ticket
-        fields = ('id','tag','info','repair','support','status')
+        fields = ('id','tag','info','repair','support','status','chat')

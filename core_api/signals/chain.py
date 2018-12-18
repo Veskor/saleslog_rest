@@ -41,14 +41,42 @@ def delete_chain(sender, instance, **kwargs):
     #chat.delete
 
     deleted = chain.delete()
+
+# ---
+# Utils for chain
+# ---
+
+def safely_check_for_chain(instance):
+    try:
+        chain = instance.tag
+        return chain
+    except:
+        return False
+
+def create_a_chat_for_ticket(ticket, tag=None):
+    if tag:
+        chat = Chat.objects.create(origin=Chat.TICKET,tag=tag)
+    else:
+        chat = Chat.objects.create(origin=Chat.TICKET)
+
+    chat.save()
+    ticket.chat = chat
+    ticket.save()
+
+    return chat
+
 # ---
 # Chain tickets field tracker for ticket id's
 # ---
+
 @receiver(post_save, sender=Ticket, dispatch_uid='update_ticket_list')
 def update_chain(sender, instance, **kwargs):
-    if instance.tag:
-        chain = instance.tag
+    chain = safely_check_for_chain(instance)
+    if chain:
         tickets = json.loads(str(chain.tickets))
+
+        # assign a chat to a ticket
+        chat = create_a_chat_for_ticket(instance)
 
         if not instance.id in tickets:
             tickets.append(instance.id)
@@ -65,35 +93,24 @@ def update_chain(sender, instance, **kwargs):
         serialized.is_valid()
 
         saved = serialized.save()
-
-@receiver(pre_delete, sender=Ticket, dispatch_uid='alter_ticket_list')
-def alter_chain(sender, instance, **kwargs):
-    chain = instance.tag
-
-    tickets = json.loads(str(chain.tickets))
-    tickets.remove(instance.id)
-    data = {'tickets':tickets}
-
-    serialized = ChainSerializer(chain,data=data,partial=True)
-
-    serialized.is_valid()
-
-    saved = serialized.save()
+    else:
+        chat = create_a_chat_for_ticket(instance)
 
 # Chat updater
 @receiver(post_save, sender=Chat, dispatch_uid='update_chat_list')
 def update_chain_chat(sender, instance, **kwargs):
-    chain = instance.tag
+    chain = safely_check_for_chain(instance)
+    if chain:
 
-    chats = json.loads(chain.chats)
+        chats = json.loads(chain.chats)
 
-    if not instance.id in chats:
-        chats.append(instance.id)
+        if not instance.id in chats:
+            chats.append(instance.id)
 
-    data = {'chats':chats}
+        data = {'chats':chats}
 
-    serialized = ChainSerializer(chain,data=data,partial=True)
+        serialized = ChainSerializer(chain,data=data,partial=True)
 
-    serialized.is_valid()
+        serialized.is_valid()
 
-    saved = serialized.save()
+        saved = serialized.save()

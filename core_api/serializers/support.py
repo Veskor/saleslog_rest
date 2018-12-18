@@ -9,14 +9,14 @@ class SupportSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Support
-        fields = ('id','name','network','fields','ip','status_type')
+        fields = ('id','name','network','fields','ip','status_type','logo')
 
     def get_status_type(self, obj):
         try:
             return StatusType.objects.get(relation__model='Support',relation__model_id=obj.id).id
         except:
             return ''
-            
+
 class UserSerializer(serializers.Serializer):
     id = serializers.CharField()
     username = serializers.CharField()

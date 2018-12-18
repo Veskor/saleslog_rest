@@ -30,8 +30,8 @@ class SupportViewset(viewsets.ModelViewSet):
 
         for customer in customers:
 
-            data = json.loads(customer.data.replace('\"','\''))
-            extra_data = json.loads(customer.extra_data.replace('\"','\''))
+            data = json.loads(str(customer.data))
+            extra_data = json.loads(str(customer.extra_data))
 
             for item in self.request.data['delFields']:
                 # move from one list to another
