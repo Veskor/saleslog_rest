@@ -9,7 +9,7 @@ urlpatterns = [
         accounts.views.UserCreationView.as_view({'get':'list','post':'create'}),
         name='register'),
     url(_(r'^confirm_user/(?P<slug>[-\w]+)$'),
-        accounts.views.ConfrmUser.as_view({'post':'SetPassword'}),
+        accounts.views.ConfrmUser.as_view({'post':'SetPassword','get':'CheckSlug'}),
         name='confirm user'),
     url(r'^login/', obtain_jwt_token),
     url(r'^me/', accounts.views.UserMeView.as_view({'get':'get'})),

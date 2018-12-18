@@ -48,6 +48,14 @@ class UserCreationView(viewsets.ViewSet):
 class ConfrmUser(viewsets.ViewSet):
     serializer_class = PasswordSerializer
 
+    @detail_route(methods=['get'])
+    def CheckSlug(self, request, slug):
+        try:
+            user = User.objects.filter(activation_key=slug)[0]
+            return Response(True)
+        except:
+            return Response(False)
+
     @detail_route(methods=['post'])
     def SetPassword(self, request, slug):
 
