@@ -21,7 +21,7 @@ class TicketViewset(viewsets.ModelViewSet):
         data['chat'] = chat.data
         return Response(data)
 
-    def list(self, request):
+    def list(self, request, *args, **kwargs):
         try:
             pk = request.GET.get('pk','')
             self.queryset = self.queryset.filter(support=pk)
