@@ -52,7 +52,7 @@ class SupportViewset(viewsets.ModelViewSet):
         tickets = Ticket.objects.filter(support=pk)
         tickets = TicketSerializer(tickets,many=True)
 
-        support = SupportSerializer(self.get_object())
+        support = SupportSerializer(self.get_object(),context={'request': request})
 
         group = Group.objects.filter(name=support.data['name']+':'+str(support.data['id']))[0]
         users = User.objects.filter(groups=group.id)

@@ -1,11 +1,14 @@
 from rest_framework import serializers
 from ..models import Support, StatusType
 from django.contrib.auth.models import User
+from django.conf import settings
+from rest_framework.reverse import reverse
 
 class SupportSerializer(serializers.ModelSerializer):
     fields = serializers.JSONField()
     ip = serializers.IPAddressField()
     status_type = serializers.SerializerMethodField()
+    logo = serializers.SerializerMethodField()
 
     class Meta:
         model = Support
@@ -16,6 +19,9 @@ class SupportSerializer(serializers.ModelSerializer):
             return StatusType.objects.get(relation__model='Support',relation__model_id=obj.id).id
         except:
             return ''
+
+    def get_logo(self, obj):
+        return settings.BASE_URL + obj.logo.url
 
 class UserSerializer(serializers.Serializer):
     id = serializers.CharField()
