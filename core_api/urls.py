@@ -2,7 +2,7 @@ from django.conf.urls import url, include
 from rest_framework.routers import DefaultRouter
 from .views.support import SupportViewset
 from .views.repair import RepairNetworkViewset, RepairViewset
-from .views.customer import CustomerViewset
+from .views.customer import CustomerViewset, upload_file
 from .views.chain import ChainViewset, StatusViewSet, ChatsViewSet, MessageViewSet
 from .views.ticket import TicketViewset
 
@@ -19,6 +19,7 @@ router.register(r'message', MessageViewSet)
 router.register(r'support', SupportViewset)
 
 urlpatterns = [
+    url(r'upload/', upload_file),
     url(r'accounts/', include('accounts.urls', namespace='accounts')),
     url(
             r'',

@@ -1,17 +1,19 @@
 from rest_framework import viewsets
 from rest_framework import filters
-
-from ..serializers.customer import CustomerSerializer, StatusCustomerSerializer, StatusCustomerDeleteSerializer
-from ..serializers.chain import ChainSerializer, StatusSerializer
-from ..models import Chain, Status, Support
-from ..decorators import create_sub_model_on_detail
-from ..pagination import LargeResultsSetPagination
-
 from rest_framework.response import Response
 from rest_framework.permissions import IsAuthenticated
-from rest_framework.decorators import detail_route
+from rest_framework.decorators import detail_route, api_view
 
 import json
+
+from ..decorators import create_sub_model_on_detail
+from ..models import Chain, Status, Support
+from ..pagination import LargeResultsSetPagination
+from ..serializers.chain import ChainSerializer, StatusSerializer
+from ..serializers.customer import CustomerSerializer,\
+                                   StatusCustomerSerializer,\
+                                   StatusCustomerDeleteSerializer,\
+                                   FileUploadSerializer
 
 def get_statuses(ids):
     statuses = []
@@ -40,6 +42,21 @@ class FilterJSON(filters.BaseFilterBackend):
                     filtered_queryset.append(item)
 
         return filtered_queryset
+
+@api_view(['GET', 'POST'])
+def upload_file(request):
+    if request.method == 'GET':
+        return Response(FileUploadSerializer().data)
+
+    up_file = request.FILES['file']
+    destination = open('/media/customer_files/' + up_file.name, 'wb+')
+
+    for chunk in up_file.chunks():
+        destination.write(chunk)
+
+    destination.close()
+
+    return Response(destination.name)
 
 class CustomerViewset(viewsets.ModelViewSet):
     serializer_class = CustomerSerializer

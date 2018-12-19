@@ -2,6 +2,11 @@ from ..models import Customer, Chain, Status, StatusType
 from ..serializers.chain import StatusSerializer
 from rest_framework import serializers
 
+class FileUploadSerializer(serializers.Serializer):
+    file = serializers.FileField()
+    class Meta:
+        fields = ('file')
+
 class CustomerSerializer(serializers.ModelSerializer):
 
     data = serializers.JSONField()
