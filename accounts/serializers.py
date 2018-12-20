@@ -30,7 +30,7 @@ class UserRegistrationSerializer(serializers.ModelSerializer):
             name, id = item.name.split(':')
             support = Support.objects.get(id=id)
 
-            groups.append({name:support.color})
+            groups.append({id:support.color})
 
         return groups
     def create(self, validated_data):
