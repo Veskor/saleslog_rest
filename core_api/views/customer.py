@@ -4,6 +4,8 @@ from rest_framework.response import Response
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.decorators import detail_route, api_view
 
+from django.conf import settings
+
 import json
 
 from ..decorators import create_sub_model_on_detail
@@ -49,7 +51,7 @@ def upload_file(request):
         return Response(FileUploadSerializer().data)
 
     up_file = request.FILES['file']
-    destination = open('/media/customer_files/' + up_file.name, 'wb+')
+    destination = open(settings.MEDIA_ROOT +'/customer_files/' + up_file.name, 'wb+')
 
     for chunk in up_file.chunks():
         destination.write(chunk)
