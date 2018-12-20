@@ -5,6 +5,9 @@ from lib.utils import validate_email as email_is_valid
 
 from accounts.models import User, USER_TYPES, SALES, \
                             ADMIN, MANAGER, SUPER_ADMIN
+
+from core_api.models import Support
+
 import json
 
 class UserSerializer(serializers.ModelSerializer):
@@ -24,7 +27,11 @@ class UserRegistrationSerializer(serializers.ModelSerializer):
     def get_groups(self, value):
         groups = []
         for item in self.instance.groups.all():
-            groups.append(item.name)
+            name, id = item.name.split(':')
+            support = Support.objects.get(id=id)
+
+            groups.append({name:support.color})
+
         return groups
     def create(self, validated_data):
         """
