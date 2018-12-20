@@ -21,8 +21,11 @@ class SupportSerializer(serializers.ModelSerializer):
             return ''
 
     def get_logo(self, obj):
-        return settings.BASE_URL + obj.logo.url
-
+        try:
+            return settings.BASE_URL + obj.logo.url
+        except:
+            return ''
+            
 class UserSerializer(serializers.Serializer):
     id = serializers.CharField()
     username = serializers.CharField()
