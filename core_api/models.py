@@ -27,6 +27,7 @@ class Support(models.Model):
     network = models.ForeignKey(RepairNetwork,on_delete=models.CASCADE)
     fields = models.TextField(default='')
     logo = models.FileField(upload_to='support_logos')
+    color = models.CharField(max_length=8)
 
     def __str__(self):
         return self.name

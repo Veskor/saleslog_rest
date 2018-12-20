@@ -12,7 +12,7 @@ class SupportSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Support
-        fields = ('id','name','network','fields','ip','status_type','logo')
+        fields = ('id','name','network','fields','ip','status_type','logo','color')
 
     def get_status_type(self, obj):
         try:
@@ -25,7 +25,7 @@ class SupportSerializer(serializers.ModelSerializer):
             return settings.BASE_URL + obj.logo.url
         except:
             return ''
-            
+
 class UserSerializer(serializers.Serializer):
     id = serializers.CharField()
     username = serializers.CharField()
