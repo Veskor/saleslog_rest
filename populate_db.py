@@ -21,8 +21,8 @@ network.save()
 support = Support.objects.create(name='Micin support',
                                  ip='1.1.1.1',
                                  network=network,
-                                 fields="{}",
-                                 color='#0000FF')
+                                 fields='',
+                                 color='#0693E3')
 
 support.save()
 
