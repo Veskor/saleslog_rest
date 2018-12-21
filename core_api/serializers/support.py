@@ -8,11 +8,11 @@ class SupportSerializer(serializers.ModelSerializer):
     fields = serializers.JSONField()
     ip = serializers.IPAddressField()
     status_type = serializers.SerializerMethodField()
-    logo = serializers.SerializerMethodField()
+    logo_url = serializers.SerializerMethodField()
 
     class Meta:
         model = Support
-        fields = ('id','name','network','fields','ip','status_type','logo','color')
+        fields = ('id','name','network','fields','ip','status_type','logo_url','logo','color')
 
     def get_status_type(self, obj):
         try:
@@ -20,7 +20,7 @@ class SupportSerializer(serializers.ModelSerializer):
         except:
             return ''
 
-    def get_logo(self, obj):
+    def get_logo_url(self, obj):
         try:
             return settings.BASE_URL + obj.logo.url
         except:
