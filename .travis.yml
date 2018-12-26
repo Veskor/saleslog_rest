@@ -1,0 +1,12 @@
+sudo: required
+dist: trusty
+
+services:
+- docker
+
+install:
+- docker-compose pull
+- docker-compose build
+
+script:
+- sudo docker-compose run --no-deps --rm web python manage.py test -settings=saleslog_rest.testing
