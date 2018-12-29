@@ -83,9 +83,9 @@ class CustomerViewset(viewsets.ModelViewSet):
             pass
 
         if len(self.queryset) == 0:
-            support = Support.objects.get(pk=pk)
-            header = []
             try:
+                support = Support.objects.get(pk=pk)
+                header = []
                 for item in json.loads(support.fields):
                     header.append(item['name'])
             except:

@@ -9,5 +9,6 @@ install:
 - docker-compose build
 
 script:
+- sudo docker-compose run --no-deps --rm web python manage.py makemigrations --noinput
 - sudo docker-compose run --no-deps --rm web python manage.py migrate --noinput
-- sudo docker-compose run --no-deps --rm web python manage.py test -settings=saleslog_rest.testing
+- sudo docker-compose run --no-deps --rm web python manage.py test core_api/core_api.json -settings=saleslog_rest.testing

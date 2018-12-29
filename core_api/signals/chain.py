@@ -1,5 +1,6 @@
 from django.db.models.signals import post_save, post_delete, pre_delete
 from django.dispatch import receiver
+from functools import wraps
 import json
 
 from ..serializers.chain import ChainSerializer, ChatSerializer
@@ -46,6 +47,16 @@ def delete_chain(sender, instance, **kwargs):
 # Utils for chain
 # ---
 
+def skip_signal():
+    def _skip_signal(signal_func):
+        @wraps(signal_func)
+        def _decorator(sender, instance, **kwargs):
+            if hasattr(instance, 'skip_signal'):
+                return None
+            return signal_func(sender, instance, **kwargs)
+        return _decorator
+    return _skip_signal
+
 def safely_check_for_chain(instance):
     try:
         chain = instance.tag
@@ -59,6 +70,11 @@ def create_a_chat_for_ticket(ticket, tag=None):
     else:
         chat = Chat.objects.create(origin=Chat.TICKET)
 
+    # Defusing the bomb
+    ticket.skip_signal = True
+    chat.skip_signal = True
+
+    # bip bip bip
     chat.save()
     ticket.chat = chat
     ticket.save()
@@ -70,6 +86,7 @@ def create_a_chat_for_ticket(ticket, tag=None):
 # ---
 
 @receiver(post_save, sender=Ticket, dispatch_uid='update_ticket_list')
+@skip_signal()
 def update_chain(sender, instance, **kwargs):
     chain = safely_check_for_chain(instance)
     if chain:
@@ -98,6 +115,7 @@ def update_chain(sender, instance, **kwargs):
 
 # Chat updater
 @receiver(post_save, sender=Chat, dispatch_uid='update_chat_list')
+@skip_signal()
 def update_chain_chat(sender, instance, **kwargs):
     chain = safely_check_for_chain(instance)
     if chain:
