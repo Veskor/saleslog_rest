@@ -1,0 +1,1 @@
+[{"model": "core_api.message", "pk": 1, "fields": {"text": "Some text", "date": "2019-01-01T18:16:00.679Z", "source": "Text", "chat": 1}}, {"model": "core_api.message", "pk": 2, "fields": {"text": "Email example", "date": "2019-01-01T18:16:30.063Z", "source": "Email", "chat": 3}}]

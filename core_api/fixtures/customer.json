@@ -1,0 +1,1 @@
+[{"model": "core_api.customer", "pk": 1, "fields": {"data": "", "extra_data": "", "support": 1, "payment_done": true}}, {"model": "core_api.customer", "pk": 2, "fields": {"data": "", "extra_data": "", "support": 1, "payment_done": true}}, {"model": "core_api.customer", "pk": 3, "fields": {"data": "", "extra_data": "", "support": 1, "payment_done": true}}]

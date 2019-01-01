@@ -1,0 +1,1 @@
+[{"model": "core_api.status", "pk": 1, "fields": {"name": "Warning", "color": "#ff690", "chain": null, "status_type": 1}}, {"model": "core_api.status", "pk": 2, "fields": {"name": "Warning", "color": "#ff690", "chain": null, "status_type": 1}}, {"model": "core_api.status", "pk": 3, "fields": {"name": "Warning", "color": "#ff690", "chain": null, "status_type": 1}}]
