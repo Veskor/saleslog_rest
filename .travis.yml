@@ -9,6 +9,6 @@ install:
 - docker-compose build --no-cache
 
 script:
-- sudo docker-compose run --no-deps --rm web python manage.py makemigrations core_api accounts --noinput
-- sudo docker-compose run --no-deps --rm web python manage.py migrate --noinput
-- sudo docker-compose run --no-deps --rm web python manage.py test -settings=saleslog_rest.testing
+- sudo docker-compose run --rm web python manage.py makemigrations core_api accounts --noinput
+- sudo docker-compose run --rm web python manage.py migrate --noinput
+- sudo docker-compose run --rm web python manage.py test -settings=saleslog_rest.testing
