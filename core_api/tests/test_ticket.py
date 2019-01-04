@@ -13,6 +13,7 @@ from core_api.models import Ticket, Chain, Status, StatusType, Customer
 import json
 
 class TestTicket(APITestCase):
+    fixtures = ['ticket.json','support.json','network.json','chain.json','customer.json']
     def setUp(self):
         super(TestTicket, self).setUp()
         self.admin = AdminFactory()
@@ -68,6 +69,7 @@ class TestTicket(APITestCase):
         }
         url = f'/api/v1/ticket/{self.ticket.id}/'
         response = self.client.get(url)
+        response.data['chat'] = response.data['chat']['id']
         response.data.update(data)
-        response = self.client.put(url,response.data)
+        response = self.client.put(url,response.data,format='json')
         self.assertEqual(response.status_code, 200)

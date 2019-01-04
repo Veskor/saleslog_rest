@@ -10,6 +10,7 @@ from core_api.factories.repair import RepairNetworkFactory, RepairFactory,\
 from core_api.models import RepairNetwork, Repair
 
 class TestRepair(APITestCase):
+
     def setUp(self):
         super(TestRepair, self).setUp()
         self.admin = AdminFactory()
@@ -63,6 +64,7 @@ class TestRepair(APITestCase):
         self.assertEqual(data['engineer'],response.data['engineer'])
 
 class TestRepairNetwork(APITestCase):
+    fixtures = ['network.json']
     def setUp(self):
         super(TestRepairNetwork, self).setUp()
         self.admin = AdminFactory()

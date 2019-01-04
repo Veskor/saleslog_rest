@@ -26,8 +26,8 @@ class Support(models.Model):
     ip = models.GenericIPAddressField(protocol='IPv4')
     network = models.ForeignKey(RepairNetwork,on_delete=models.CASCADE)
     fields = models.TextField(default='')
-    logo = models.FileField(upload_to='support_logos')
-    color = models.CharField(max_length=8)
+    logo = models.FileField(upload_to='support_logos', null=True, blank=True)
+    color = models.CharField(max_length=8, null=True, blank=True)
 
     def __str__(self):
         return self.name
