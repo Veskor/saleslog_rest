@@ -1,3 +1,5 @@
+[![Build Status](https://travis-ci.org/Veskor/saleslog_rest.svg?branch=master)](https://travis-ci.org/Veskor/saleslog_rest)
+
 ## Docs
   Brief list of commands to have when working with backend
 
