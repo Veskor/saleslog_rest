@@ -11,7 +11,7 @@ error_log = {
 for item in models:
     try:
         call_command('loaddata', 'core_api/fixtures/' + item)
-    except as e:
+    except Exception as e:
         error_log['failed'] += 1
         error_log['errors'].append(e)
 
