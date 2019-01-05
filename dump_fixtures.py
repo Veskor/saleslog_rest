@@ -3,6 +3,13 @@ from core_api.models import *
 
 from django.core.management import call_command
 
+group_file = open('accounts/fixtures/group.json', 'w')
+
+call_command('dumpdata',
+             'auth',
+              stdout=group_file,
+             )
+
 models = [
     {
         'file': open('core_api/fixtures/network.json', 'w'),
