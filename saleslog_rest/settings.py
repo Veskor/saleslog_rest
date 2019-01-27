@@ -110,6 +110,7 @@ if os.getenv('GAE_APPLICATION', None):
             'ENGINE': 'django.db.backends.postgresql_psycopg2',
             'NAME': os.getenv('postgres_name'),
             'USER': os.getenv('postgres_user'),
+            'PASSWORD': os.getenv('postgres_password'),
             'HOST': os.getenv('cloud_sql_host'),
             'PORT': 5432,
         }
