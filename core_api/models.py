@@ -24,7 +24,7 @@ class RepairNetwork(models.Model):
 class Support(models.Model):
     name = models.CharField(max_length=32)
     ip = models.GenericIPAddressField(protocol='IPv4')
-    network = models.ForeignKey(RepairNetwork,on_delete=models.CASCADE)
+    network = models.ForeignKey(RepairNetwork, on_delete=models.DO_NOTHING)
     fields = models.TextField(default='')
     logo = models.FileField(upload_to='support_logos', null=True, blank=True)
     color = models.CharField(max_length=8, null=True, blank=True)
@@ -35,13 +35,13 @@ class Support(models.Model):
 class Customer(models.Model):
     data = models.TextField()
     extra_data = models.TextField(null=True,blank=True)
-    support = models.ForeignKey(Support)
+    support = models.ForeignKey(Support,on_delete=models.DO_NOTHING)
     payment_done = models.BooleanField(default=True)
     #payment = models.ForeignKey(Payment,null=True,blank=True)
 
 class Chain(models.Model):
     tickets = models.TextField(null=True)
-    customer = models.ForeignKey(Customer)
+    customer = models.ForeignKey(Customer,on_delete=models.DO_NOTHING)
     statuses = models.TextField(null=True)
     chats = models.TextField(null=True)
 #    service_plan = models.ForgeinKey('Payment')
@@ -52,27 +52,27 @@ class Chain(models.Model):
 class Part(models.Model):
     name = models.CharField(max_length=32)
     quantity = models.IntegerField()
-    network = models.ForeignKey(RepairNetwork,default='')
+    network = models.ForeignKey(RepairNetwork,default='',on_delete=models.DO_NOTHING)
 
     def __str__(self):
         return self.name
 
 class Equipment(models.Model):
     name = models.CharField(max_length=32)
-    network = models.ForeignKey(RepairNetwork,default='',)
+    network = models.ForeignKey(RepairNetwork,default='',on_delete=models.DO_NOTHING)
 
     def __str__(self):
         return self.name
 
 class Engineer(models.Model):
     username = models.CharField(max_length=32)
-    network = models.ForeignKey(RepairNetwork,default='')
+    network = models.ForeignKey(RepairNetwork,default='',on_delete=models.DO_NOTHING)
 
     def __str__(self):
         return self.username
 
 class StatusType(models.Model):
-    relation = models.ForeignKey(Relation,null=True,blank=True)
+    relation = models.ForeignKey(Relation,null=True,blank=True,on_delete=models.DO_NOTHING)
 
     def __str__(self):
         return self.relation.name
@@ -80,8 +80,8 @@ class StatusType(models.Model):
 class Status(models.Model):
     name = models.CharField(max_length=32)
     color = models.CharField(max_length=6,default='')
-    chain = models.ForeignKey(Chain,default='',null=True,blank=True)
-    status_type = models.ForeignKey(StatusType,null=True,blank=True)
+    chain = models.ForeignKey(Chain,default='',null=True,blank=True,on_delete=models.DO_NOTHING)
+    status_type = models.ForeignKey(StatusType,null=True,blank=True,on_delete=models.DO_NOTHING)
 
     def __str__(self):
         return self.name
@@ -89,8 +89,8 @@ class Status(models.Model):
 class Repair(models.Model):
     part = models.ForeignKey(Part,on_delete=models.CASCADE,null=True,blank=True) # 1 > ??? Parts.
     equipment = models.ForeignKey(Equipment,on_delete=models.CASCADE,null=True,blank=True)
-    engineer = models.ForeignKey(Engineer,null=True,blank=True)
-    network = models.ForeignKey(RepairNetwork)
+    engineer = models.ForeignKey(Engineer,null=True,blank=True,on_delete=models.CASCADE)
+    network = models.ForeignKey(RepairNetwork,on_delete=models.CASCADE)
 
     def __str__(self):
         return self.status # ?
@@ -103,21 +103,21 @@ class Chat(models.Model):
         (MASTER, 'Master')
     )
     origin = models.CharField(max_length=10, choices=TYPE_CHOICES, default=TICKET)
-    tag = models.ForeignKey(Chain,default='',null=True,blank=True)
+    tag = models.ForeignKey(Chain,default='',null=True,blank=True,on_delete=models.DO_NOTHING)
 
 class Message(models.Model):
     text = models.TextField()
     date = models.DateTimeField(auto_now_add=True)
     source = models.CharField(max_length=32)
-    chat = models.ForeignKey(Chat,default='')
+    chat = models.ForeignKey(Chat,default='',on_delete=models.DO_NOTHING)
 
 class Ticket(models.Model):
-    tag = models.ForeignKey(Chain,null=True,blank=True)
+    tag = models.ForeignKey(Chain,null=True,blank=True,on_delete=models.DO_NOTHING)
     info = models.TextField()
     repair = models.ForeignKey(Repair,blank=True,null=True,on_delete=models.CASCADE)
-    support = models.ForeignKey(Support,default='')
-    status = models.ForeignKey(Status,blank=True,null=True)
-    chat = models.ForeignKey(Chat,blank=True,null=True)
+    support = models.ForeignKey(Support,default='',on_delete=models.DO_NOTHING)
+    status = models.ForeignKey(Status,blank=True,null=True,on_delete=models.DO_NOTHING)
+    chat = models.ForeignKey(Chat,blank=True,null=True,on_delete=models.DO_NOTHING)
 
 
 

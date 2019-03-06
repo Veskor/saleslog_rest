@@ -7,7 +7,6 @@ from rest_framework.decorators import detail_route
 from accounts.models import User
 from accounts.serializers import UserRegistrationSerializer, UserSerializer,\
                                  CreateSerializer, PasswordSerializer
-from lib.utils import AtomicMixin
 
 # create every type of user
 # login with jwt (obtain jwt)
