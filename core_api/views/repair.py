@@ -68,6 +68,10 @@ class RepairViewset(viewsets.ModelViewSet):
     def get_queryset(self, *args, **kwargs):
         return Repair.objects.filter(network=self.kwargs['id'])
 
-    def create(self, request, *args, **kwargs):
-        request.POST['network'] = self.kwargs['id']
-        return super(RepairViewset, self).create(request, *args, **kwargs)
+    def get_serializer_context(self):
+        """
+        Extra context provided to the serializer class.
+        """
+        return {
+            'kwargs': self.kwargs,
+        }

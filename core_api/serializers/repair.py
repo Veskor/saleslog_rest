@@ -33,6 +33,9 @@ class RepairSerializer(serializers.ModelSerializer):
         model = Repair
         fields = ('id','network','part','equipment','engineer')
 
+    def create(self, validated_data):
+        validated_data['network'] = RepairNetwork.objects.get(id=int(self.context.get('kwargs')['id']))
+        return Repair(**validated_data)
 #    def validate(self, data):
     # TODO: if part, equipment and engineer is assigned
     # set status from pending to ready .

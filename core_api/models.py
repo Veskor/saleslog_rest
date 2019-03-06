@@ -90,7 +90,7 @@ class Repair(models.Model):
     part = models.ForeignKey(Part,on_delete=models.CASCADE,null=True,blank=True) # 1 > ??? Parts.
     equipment = models.ForeignKey(Equipment,on_delete=models.CASCADE,null=True,blank=True)
     engineer = models.ForeignKey(Engineer,null=True,blank=True,on_delete=models.CASCADE)
-    network = models.ForeignKey(RepairNetwork,on_delete=models.CASCADE)
+    network = models.ForeignKey(RepairNetwork,on_delete=models.CASCADE,null=True,blank=True)
 
     def __str__(self):
         return self.status # ?

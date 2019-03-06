@@ -17,11 +17,15 @@ def create_role(sender, instance, **kwargs):
 
     if created == True:
         can_edit_tickets.save()
+    else:
+        can_edit_tickets = None
 
     can_view_tickets, created = Permission.objects.get_or_create(name='Can View {}'.format(name), codename='can_view_tickets_{}'.format(name),
                        content_type=ticket_ct)
     if created == True:
         can_view_tickets.save()
+    else:
+        can_view_tickets = None
 
     # Customers
     customer_ct = ContentType.objects.get(model='customer')
@@ -30,6 +34,8 @@ def create_role(sender, instance, **kwargs):
                        content_type=customer_ct)
     if created == True:
         can_edit_customers.save()
+    else:
+        can_edit_customers = None
 
     can_view_customers, created = Permission.objects.get_or_create(name='Can View {}'.format(name), codename='can_view_customers_{}'.format(name),
                        content_type=customer_ct)
@@ -40,8 +46,10 @@ def create_role(sender, instance, **kwargs):
 
     if created == True:
         group.save()
-
-    group.permissions = [can_edit_tickets,can_view_tickets,can_edit_customers,can_view_customers]
+        group.permissions.add(can_edit_tickets)
+        group.permissions.add(can_view_tickets)
+        group.permissions.add(can_edit_customers)
+        group.permissions.add(can_view_customers)
 
     relation = Relation.objects.create(model='Support',model_id=instance.id)
 
